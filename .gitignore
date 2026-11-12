@@ -1,0 +1,53 @@
+# ── Python ──────────────────────────────
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.env
+
+# ── LLM 학습 산출물 (용량이 커서 올리지 않음) ──
+llm/outputs/
+unsloth_compiled_cache/
+*.safetensors
+*.gguf
+*.pt
+*.pth
+*.ckpt
+
+# ── ML-Agents 학습 로그·체크포인트 ──
+rl/results/
+
+# ── Unity (unity/ 아래 프로젝트 공통) ──
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/[Oo]bj/
+**/[Bb]uild/
+**/[Bb]uilds/
+**/[Ll]ogs/
+**/[Uu]ser[Ss]ettings/
+**/[Mm]emoryCaptures/
+**/[Rr]ecordings/
+**/Assets/AssetStoreTools*
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.apk
+*.aab
+*.unitypackage
+crashlytics-buildid.txt
+sysinfo.txt
+
+# ── 에디터 ──
+.vs/
+.vscode/
+.idea/

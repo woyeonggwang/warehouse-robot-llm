@@ -1,0 +1,76 @@
+place,group
+지게차 작업 구역,warehouse_unlisted
+지게차 주차 구역,warehouse_unlisted
+랙 꼭대기,warehouse_unlisted
+고층 랙 구역,warehouse_unlisted
+자동 창고 크레인 구역,warehouse_unlisted
+컨베이어 아래,warehouse_unlisted
+컨베이어 합류 지점,warehouse_unlisted
+자동 분류기 안쪽,warehouse_unlisted
+랩핑기 회전판 위,warehouse_unlisted
+도크 레벨러,warehouse_unlisted
+도크 가장자리,warehouse_unlisted
+트럭 짐칸,warehouse_unlisted
+컨테이너 안,warehouse_unlisted
+로봇 작업 셀 안,warehouse_unlisted
+고가품 보관실,warehouse_unlisted
+의약품 보관소,warehouse_unlisted
+급속 냉동실,warehouse_unlisted
+박스 압축기 앞,warehouse_unlisted
+팔레트 리프트 위,warehouse_unlisted
+수직 반송기,warehouse_unlisted
+메자닌 2층,warehouse_unlisted
+중량물 구역,warehouse_unlisted
+유리 제품 구역,warehouse_unlisted
+위험물 대기 구역,warehouse_unlisted
+배터리 교체 구역,warehouse_unlisted
+무인 운반차 전용 통로,warehouse_unlisted
+고속 셔터 앞,warehouse_unlisted
+냉동 탑차 안,warehouse_unlisted
+하역 중인 트럭 뒤,warehouse_unlisted
+용접 작업장,hazard_access
+입고 도크,warehouse_unlisted
+출고 도크,warehouse_unlisted
+입하장,warehouse_unlisted
+출하 검수대,warehouse_unlisted
+반출 구역,warehouse_unlisted
+포장 라인,warehouse_unlisted
+포장실,warehouse_unlisted
+출고 준비 구역,warehouse_unlisted
+입고 검사 구역,warehouse_unlisted
+선반 구역,warehouse_unlisted
+피킹 스테이션,warehouse_unlisted
+합포장 구역,warehouse_unlisted
+송장 출력대,warehouse_unlisted
+로봇 대기 장소,warehouse_unlisted
+충전 대기 구역,warehouse_unlisted
+비상 계단,hazard_access
+에스컬레이터,hazard_access
+변전실,hazard_access
+분전반 앞,hazard_access
+가스 저장소,hazard_access
+발전기실,hazard_access
+공조실,hazard_access
+소화전 앞,hazard_access
+비상 대피로,hazard_access
+옥외 계단,hazard_access
+난간 옆,hazard_access
+정비 피트,hazard_access
+물탱크실,hazard_access
+방화 셔터 아래,hazard_access
+보행자 전용 구역,hazard_access
+차량 출입로,hazard_access
+하역장 경사로,hazard_access
+3층 회의실,building_office
+2층 휴게실,building_office
+지하 1층 식당,building_office
+주방,building_office
+세탁실,building_office
+숙직실,building_office
+보건실,building_office
+문서 보관실,building_office
+고속도로,outside
+기차역,outside
+항구,outside
+공항,outside
+아파트 단지,outside

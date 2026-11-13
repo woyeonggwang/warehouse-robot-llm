@@ -40,3 +40,15 @@ SYSTEM_PROMPT = (
     '형식: {"plan": [{"skill": ..., ...}]}\n'
     '없는 위치면 {"plan": [], "error": "unknown_location"}, 할 수 없는 일이면 {"plan": [], "error": "unsupported_command"}'
 )
+
+# 과잉 해석 방지 규칙: 목록에 없는 장소를 비슷한 위치로 바꿔 실행하지 않게 함 (2026-11-12 실험용)
+# 예시 장소는 학습 데이터의 거부 예시에 이미 있는 것만 씀 → probe_reject 세트의 장소와 겹치지 않게
+STRICT_RULE = (
+    "\n주의: 위치는 위 목록에 있는 것만 쓴다. 목록에 없는 장소(예: 정문, 사무실)는 "
+    "비슷해 보여도 다른 위치로 바꾸거나 추측하지 말고 반드시 unknown_location 으로 거부한다."
+)
+
+PROMPTS = {
+    "default": SYSTEM_PROMPT,
+    "strict": SYSTEM_PROMPT + STRICT_RULE,
+}

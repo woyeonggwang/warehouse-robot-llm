@@ -3,7 +3,7 @@
 실행 예:
   python evaluate.py --model Qwen/Qwen3.5-0.8B
   python evaluate.py --model Qwen/Qwen3.5-0.8B --limit 50        # 빠르게 50개만
-  python evaluate.py --model outputs/lora_qwen35_08b --name ft    # 파인튜닝한 모델 (나중에)
+  python evaluate.py --model outputs/qwen35_2b_v2/merged --prompt strict --test data/probe_reject.jsonl --name probe_2b_strict
 
 지표:
   - JSON 유효율: 출력에서 JSON 을 꺼내 파싱할 수 있는 비율
@@ -21,7 +21,7 @@ import time
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from schema import SYSTEM_PROMPT
+from schema import PROMPTS, SYSTEM_PROMPT
 
 
 def load_model(model_id):
@@ -40,8 +40,8 @@ def load_model(model_id):
     return model, tok
 
 
-def build_prompt(tok, text):
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": text}]
+def build_prompt(tok, text, system=SYSTEM_PROMPT):
+    messages = [{"role": "system", "content": system}, {"role": "user", "content": text}]
     # enable_thinking=False: 사고 모드가 있는 모델(Qwen 계열)은 끄고 바로 답하게 함. 없는 모델은 무시됨
     return tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True,
                                    enable_thinking=False)
@@ -90,7 +90,10 @@ def main():
     ap.add_argument("--test", default="data/test.jsonl")
     ap.add_argument("--limit", type=int, default=None, help="앞에서 N개만 평가")
     ap.add_argument("--batch", type=int, default=16)
+    ap.add_argument("--prompt", default="default", choices=list(PROMPTS),
+                    help="시스템 프롬프트 종류 (strict: 목록에 없는 위치 추측 금지 규칙 추가)")
     args = ap.parse_args()
+    system = PROMPTS[args.prompt]
 
     rows = [json.loads(l) for l in open(args.test, encoding="utf-8")]
     if args.limit:
@@ -105,7 +108,7 @@ def main():
     t0 = time.time()
     for i in range(0, len(rows), args.batch):
         batch = rows[i:i + args.batch]
-        prompts = [build_prompt(tok, r["input"]) for r in batch]
+        prompts = [build_prompt(tok, r["input"], system) for r in batch]
         enc = tok(prompts, return_tensors="pt", padding=True, add_special_tokens=False).to("cuda")
         with torch.no_grad():
             out = model.generate(**enc, max_new_tokens=256, do_sample=False,
@@ -125,7 +128,7 @@ def main():
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-    print(f"\n\n=== {args.model} ({elapsed:.0f}초, 문장당 {elapsed / len(rows):.2f}초) ===")
+    print(f"\n\n=== {args.model} | 프롬프트 {args.prompt} | {args.test} ({elapsed:.0f}초, 문장당 {elapsed / len(rows):.2f}초) ===")
     print("전체          :", summarize(rows))
     print("본 패턴       :", summarize([r for r in rows if not r.get("heldout")]))
     print("처음 보는 패턴:", summarize([r for r in rows if r.get("heldout")]))

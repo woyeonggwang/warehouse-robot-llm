@@ -20,6 +20,7 @@ from datasets import Dataset
 from transformers import DataCollatorForSeq2Seq, Trainer, TrainingArguments
 
 from evaluate import build_prompt            # 평가 때와 완전히 같은 프롬프트 형식으로 학습
+from schema import PROMPTS
 
 
 def load_rows(path):
@@ -35,7 +36,10 @@ def main():
     ap.add_argument("--r", type=int, default=16, help="LoRA rank")
     ap.add_argument("--batch", type=int, default=16)
     ap.add_argument("--max_len", type=int, default=512)
+    ap.add_argument("--prompt", default="default", choices=list(PROMPTS),
+                    help="학습에 쓸 시스템 프롬프트 (평가 때도 같은 값을 써야 함)")
     args = ap.parse_args()
+    system = PROMPTS[args.prompt]
 
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=args.model, max_seq_length=args.max_len, dtype=torch.bfloat16, load_in_4bit=False)
@@ -51,7 +55,7 @@ def main():
     end = "<|im_end|>" if "<|im_end|>" in tok.get_vocab() else tok.eos_token
 
     def encode(row):
-        prompt_ids = tok(build_prompt(tok, row["input"]), add_special_tokens=False)["input_ids"]
+        prompt_ids = tok(build_prompt(tok, row["input"], system), add_special_tokens=False)["input_ids"]
         answer_ids = tok(row["output"] + end, add_special_tokens=False)["input_ids"]
         ids = (prompt_ids + answer_ids)[:args.max_len]
         labels = ([-100] * len(prompt_ids) + answer_ids)[:args.max_len]

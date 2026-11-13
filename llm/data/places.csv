@@ -1,0 +1,107 @@
+﻿place,group
+입고장,official
+입고 구역,official
+입고대,official
+출고장,official
+출고 구역,official
+출하장,official
+포장대,official
+포장 구역,official
+포장하는 곳,official
+충전소,official
+충전기,official
+충전 스테이션,official
+A구역 3번 선반,official
+B열 2번 칸,official
+D-4,official
+하역장,warehouse_unlisted
+적재장,warehouse_unlisted
+검수대,warehouse_unlisted
+반품 구역,warehouse_unlisted
+분류 라인,warehouse_unlisted
+컨베이어 벨트,warehouse_unlisted
+피킹 구역,warehouse_unlisted
+보관 랙,warehouse_unlisted
+팔레트 보관소,warehouse_unlisted
+임시 보관소,warehouse_unlisted
+상차장,warehouse_unlisted
+하차장,warehouse_unlisted
+도크,warehouse_unlisted
+출하 대기 구역,warehouse_unlisted
+입고 대기 구역,warehouse_unlisted
+재고 구역,warehouse_unlisted
+불량품 구역,warehouse_unlisted
+라벨 작업대,warehouse_unlisted
+계량대,warehouse_unlisted
+랩핑기 앞,warehouse_unlisted
+스캔대,warehouse_unlisted
+자재실,warehouse_unlisted
+소모품 창고,warehouse_unlisted
+공박스 보관소,warehouse_unlisted
+대형 화물 구역,warehouse_unlisted
+소형 화물 구역,warehouse_unlisted
+냉장 보관소,warehouse_unlisted
+냉동 창고,warehouse_unlisted
+위험물 보관소,warehouse_unlisted
+지게차 충전소,warehouse_unlisted
+반송 구역,warehouse_unlisted
+크로스도킹 구역,warehouse_unlisted
+E구역 2번 선반,warehouse_unlisted
+H3,warehouse_unlisted
+사무실,building_office
+회의실,building_office
+탈의실,building_office
+휴게실,building_office
+식당,building_office
+화장실,building_office
+샤워실,building_office
+로비,building_office
+안내 데스크,building_office
+경비실,building_office
+관리실,building_office
+의무실,building_office
+흡연실,building_office
+수유실,building_office
+서버실,building_office
+탕비실,building_office
+센터장실,building_office
+교육장,building_office
+2층 사무실,building_office
+계단,hazard_access
+엘리베이터,hazard_access
+화물 엘리베이터,hazard_access
+전기실,hazard_access
+보일러실,hazard_access
+기계실,hazard_access
+지게차 통로,hazard_access
+비상구,hazard_access
+소방 설비실,hazard_access
+옥상,hazard_access
+고압 설비 구역,hazard_access
+배터리 보관실,hazard_access
+화학약품 보관실,hazard_access
+공사 구역,hazard_access
+사람 통행로,hazard_access
+출입구,hazard_access
+후문,hazard_access
+정문,hazard_access
+주차장,hazard_access
+하역 도크 끝,hazard_access
+경사로,hazard_access
+지하 창고,hazard_access
+3층 선반,hazard_access
+편의점,outside
+은행,outside
+우리 집,outside
+학교,outside
+병원,outside
+공원,outside
+바닷가,outside
+지하철역,outside
+카페,outside
+마트,outside
+주유소,outside
+버스 정류장,outside
+본사,outside
+다른 물류센터,outside
+서울역,outside

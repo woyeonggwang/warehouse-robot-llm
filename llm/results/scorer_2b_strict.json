@@ -3,115 +3,171 @@
  "prompt": "strict",
  "labels": "data/labels.csv",
  "extra": "",
+ "method": "select",
+ "ens_configs": null,
  "n_places": 106,
  "n_extra": 0,
  "baseline_mae": [
   0.33795621631866796,
   0.17774807776070733
  ],
+ "repeats": 1,
  "nested": {
   "mae": [
-   0.10985173732867741,
-   0.12182280902520695
+   0.10985173732866724,
+   0.12182280902520587
+  ],
+  "mae_std": [
+   0.0,
+   0.0
   ],
   "rho": [
    0.884436046323068,
    0.6587335780595596
   ],
+  "spread_mean": [
+   0.0,
+   0.0
+  ],
+  "spread_max": [
+   0.0,
+   0.0
+  ],
+  "action_flips": [],
   "chosen": [
-   {
-    "fold": 0,
-    "target": "relevance",
-    "pool": "last",
-    "layer_pos": 9,
-    "alpha": 100.0,
-    "layer": 19
-   },
-   {
-    "fold": 0,
-    "target": "risk",
-    "pool": "mean",
-    "layer_pos": 5,
-    "alpha": 100.0,
-    "layer": 11
-   },
-   {
-    "fold": 1,
-    "target": "relevance",
-    "pool": "last",
-    "layer_pos": 6,
-    "alpha": 1000.0,
-    "layer": 13
-   },
-   {
-    "fold": 1,
-    "target": "risk",
-    "pool": "last",
-    "layer_pos": 9,
-    "alpha": 100.0,
-    "layer": 19
-   },
-   {
-    "fold": 2,
-    "target": "relevance",
-    "pool": "last",
-    "layer_pos": 7,
-    "alpha": 100.0,
-    "layer": 15
-   },
-   {
-    "fold": 2,
-    "target": "risk",
-    "pool": "last",
-    "layer_pos": 9,
-    "alpha": 10.0,
-    "layer": 19
-   },
-   {
-    "fold": 3,
-    "target": "relevance",
-    "pool": "last",
-    "layer_pos": 9,
-    "alpha": 10.0,
-    "layer": 19
-   },
-   {
-    "fold": 3,
-    "target": "risk",
-    "pool": "last",
-    "layer_pos": 8,
-    "alpha": 100.0,
-    "layer": 17
-   },
-   {
-    "fold": 4,
-    "target": "relevance",
-    "pool": "last",
-    "layer_pos": 6,
-    "alpha": 100.0,
-    "layer": 13
-   },
-   {
-    "fold": 4,
-    "target": "risk",
-    "pool": "last",
-    "layer_pos": 9,
-    "alpha": 10.0,
-    "layer": 19
-   }
+   [
+    {
+     "fold": 0,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       19
+      ]
+     ],
+     "alpha": 100.0
+    },
+    {
+     "fold": 0,
+     "target": "risk",
+     "configs": [
+      [
+       "mean",
+       11
+      ]
+     ],
+     "alpha": 100.0
+    },
+    {
+     "fold": 1,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       13
+      ]
+     ],
+     "alpha": 1000.0
+    },
+    {
+     "fold": 1,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       19
+      ]
+     ],
+     "alpha": 100.0
+    },
+    {
+     "fold": 2,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       15
+      ]
+     ],
+     "alpha": 100.0
+    },
+    {
+     "fold": 2,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       19
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 3,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       19
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 3,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       17
+      ]
+     ],
+     "alpha": 100.0
+    },
+    {
+     "fold": 4,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       13
+      ]
+     ],
+     "alpha": 100.0
+    },
+    {
+     "fold": 4,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       19
+      ]
+     ],
+     "alpha": 10.0
+    }
+   ]
   ]
  },
  "selected": {
   "relevance": {
-   "pool": "last",
-   "layer": 17,
+   "configs": [
+    [
+     "last",
+     17
+    ]
+   ],
    "alpha": 100.0,
    "mae": 0.09688445390993097,
    "rho": 0.9009070111603953
   },
   "risk": {
-   "pool": "last",
-   "layer": 19,
+   "configs": [
+    [
+     "last",
+     19
+    ]
+   ],
    "alpha": 100.0,
    "mae": 0.11183030646392002,
    "rho": 0.7005755736739703
@@ -129,6 +185,8 @@
   ]
  },
  "risk_slope": 0.509019847879749,
+ "under_mean": 0.0625,
+ "under_02": 13,
  "decision": {
   "exec_rel": 0.9,
   "ask_rel": 0.5,

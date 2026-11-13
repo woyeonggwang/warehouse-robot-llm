@@ -295,6 +295,38 @@ warehouse-robot-llm/
   - 처리 시간 (2B bf16, 한 문장씩): 0.4~2.7초. 계획 생성 길이에 비례 (두 작업 연결이 가장 김)
 - 다시 만들기 순서: `make_scorer_sentences.py` → `train_scorer.py --extra data/labels_add.csv,data/labels_alias.csv --sentences data/scorer_sentences.csv --name scorer_2b_strict_sent --repeats 2` (약 4분) → `tune_thresholds.py --repeats 1` (약 20분, 기준값만 다시 정할 때는 `--reuse_rows`) → `e2e_check.py` (약 3분)
 
+## 강화학습 파트 (Unity ML-Agents, 2026-11-13 시작)
+- 첫 기술: go_to (목표 위치까지 이동). 이후 dock(정밀 정차) → follow 순서
+- 사용자 결정 (2026-11-13)
+  - 로봇 제어: 바퀴 토크 제어 (WheelCollider 좌우 바퀴 motorTorque, 행동 = 좌우 토크 -1~1 연속 2개). 속도 제어보다 학습은 어렵지만 실제 로봇에 가깝고 휴머노이드(토크 제어)로 이어짐
+  - 맵: 처음부터 실제 창고 배치로 학습 (커리큘럼 없이)
+  - NavMesh(AI Navigation 2.0.16) 길찾기와 비교 예정 (도착률·시간·충돌)
+  - 구조 B: 경로 계획 + 강화학습 제어. 전체 경로는 계획기(최단 거리 격자)가 정하고, 강화학습은 그 경로를 토크로 따라가며 장애물을 피함
+    - 이유: 실제 창고 로봇은 SLAM(위치 파악) + 경로 계획(A*, Nav2) + 현장 제어로 나뉨. 강화학습만으로 경로까지 찾게 하면(구조 A) 고정 맵에서는 NavMesh·A* 보다 불리하고 업계 구조와도 다름. B 는 실제 구조(Nav2)와 같고, 움직이는 장애물 대응·저수준 제어처럼 강화학습이 강한 부분을 보여줄 수 있으며, 휴머노이드(계획기가 어디로, 강화학습이 어떻게 걸을지)와 구조가 같음
+    - 시뮬레이션에서는 Unity 가 정확한 위치를 주므로 SLAM 역할은 생략. ROS2 + slam_toolbox 연동은 나중 단계 후보
+- 창고 배치 (WarehouseLayout, 학습장 로컬 좌표, m): 바닥 24×20, 벽 높이 1.5. 선반 줄 A~D 중심 z = 6, 2, -2, -6 (앞면이 -z), 칸 1~4 중심 x = -3.6, -1.2, 1.2, 3.6 (칸 폭 2.4, 깊이 1, 높이 2). 정차 지점은 선반 앞 0.9m. 작업대: inbound(-11.3, 6), outbound(11.3, 6), packing(11.3, -6), charger(-11.3, -6), 정차 지점 x = ±9.9. 위치 이름은 llm/schema.py 와 같음 (A1~D4, inbound, outbound, packing, charger)
+- 로봇: Rigidbody 30kg, 몸체 0.56×0.2×0.8, 구동 바퀴 2개(반지름 0.12, 좌우 ±0.33, 최대 토크 6 N·m), 앞뒤 보조바퀴(마찰 0 구체). 최고 속도 1.5 m/s·최대 회전 1.5 rad/s 를 넘으면 같은 방향 토크를 끊음. 바퀴 옆 마찰 2배, 무게중심 (0, -0.05, 0.08), ConfigureVehicleSubsteps(5, 12, 15)
+  - 직접 조종 시험 (2026-11-13 사용자): 앞뒤 양호, 뒤집힘 없음. 직진 시 옆으로 쏠림·회전 너무 빠름 → 위 마찰·무게중심·회전 제한으로 수정 (수정 후 쏠림 재확인 필요)
+- 관측 (벡터 12개): 따라갈 점 2개(경로상 1.5m·3m 앞, 로봇 기준 x·z), 최종 목표(로봇 기준 x·z·거리), 속도(x·z), 회전 속도, 직전 행동 + 광선 센서(RayPerceptionSensor3D, 좌우 8개씩 180°, 길이 8m, 태그 Wall·Shelf·Station). 창고 안 절대 위치는 넣지 않음 (지도를 외우지 않고 경로 따라가기를 배우게)
+- 보상 (2026-11-13 사용자 결정)
+  | 항목 | 값 |
+  |---|---|
+  | 경로를 따라 가까워짐 | 최단 경로 1m 줄 때마다 +0.05 (멀어지면 -) |
+  | 도착 | 0.5m 안이면 +1, 종료 (속도 조건 없음) |
+  | 충돌 | 벽·선반·작업대에 닿으면 -1, 종료 |
+  | 급조작 벌점 | 직전 결정 대비 행동 변화량² × 0.005 (이름: 행동을 부드럽게 하려는 벌점이지만 '부드러움' 은 좋은 뜻으로 헷갈릴 수 있어 '급조작 벌점' 으로 부름) |
+  | 시간 | 에피소드 전체에 -0.5 (최대 3,000 물리 스텝 = 60초) |
+  | 뒤집힘 | -1, 종료 |
+  - 최단 경로 거리는 보상 계산과 따라갈 점에만 쓰고, 정답 경로 자체를 행동으로 주지는 않음
+- 코드 (unity/WarehouseRobot/Assets/01Script)
+  - Warehouse/WarehouseArea.cs: 배치 상수(WarehouseLayout) + 학습장. 0.25m 격자에 로봇 크기(0.4m)만큼 장애물을 부풀려 빈 칸을 구하고, 위치 20곳마다 다익스트라로 최단 거리 격자 계산 → GeoDistance(보상), PathPoint(따라갈 점), SampleSpawn(시작 위치, 목표에서 경로 2m 이상)
+  - Robot/RobotAgent.cs: go_to 에이전트. 통계 GoTo/Success·Collision·Timeout (TensorBoard)
+  - Editor/WarehouseBuilder.cs: 메뉴 Warehouse > Build 1/4/8 Areas 로 학습장 생성 (기존 TrainingAreas 를 지우고 새로 만듦, 학습장 간격 30×26m). 재질은 02Resources/00Component/Materials
+  - FollowCamera.cs: 확인용 따라가는 카메라 (Main Camera)
+- 학습 설정: rl/configs/goto.yaml (PPO, batch 1024, buffer 20480, lr 3e-4 선형 감소, 은닉 256×2, normalize, gamma 0.99, time_horizon 256, max_steps 5M), BehaviorName GoTo, DecisionPeriod 5 (0.1초마다 결정)
+  - 실행: `conda activate mlagents` → 저장소 루트에서 `mlagents-learn rl/configs/goto.yaml --run-id goto_v1 --results-dir rl/results` → Unity Play
+- Player Settings 의 Run In Background 켬 (2026-11-13). 꺼져 있으면 Unity 창이 비활성일 때 Play 가 멈춰 학습이 진행되지 않음
+
 ## 베이스 모델 후보
 - Qwen/Qwen3.5-0.8B, Qwen/Qwen3.5-2B: Apache 2.0, Unsloth 공식 파인튜닝 지원. 모델 카드상 0.8B 는 '작업별 파인튜닝' 용도를 명시. 이미지 입력도 받는 모델이라 transformers 에서 CausalLM 클래스로 안 열릴 수 있음 (evaluate.py 는 ImageTextToText 클래스로 대체 시도)
 - naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-1.5B: 한국어 특화, 텍스트 전용, 컨텍스트 16k. Hugging Face 에서 이용 조건 동의 후 받을 수 있음(gated). Unsloth 지원 여부 확인 필요
@@ -318,8 +350,8 @@ warehouse-robot-llm/
   - 강화학습용: 기존 conda 환경 `mlagents` 재사용 (2026-11-12 확인)
     - Python 3.10.12, mlagents 1.1.0, mlagents_envs 1.1.0, torch 2.11.0+cu128, numpy 1.23.5, protobuf 3.20.3, onnx 1.22.0
 - Unity ML-Agents 패키지: com.unity.ml-agents 4.0.3 (Python mlagents 1.1.0 과 함께 검증된 조합. 최신 4.1.0 과 1.1.0 의 호환은 확인 필요)
-- Unity 프로젝트: unity/WarehouseRobot, 에디터 6000.3.17f1, com.unity.ml-agents 4.0.3 (2026-11-12 생성 확인)
-  - 보안 권고: Unity 의 2026년 10월 보안 권고(인증기관 eMudhra 인증서 키 유출)에서 6000.3 LTS 는 6000.3.0a1~6000.3.27f1 이 영향 대상, 패치 버전은 6000.3.27f2. 에디터 쪽 위험은 Package Manager 가 위조된 패키지 레지스트리 응답을 받을 수 있는 것 등. ML-Agents 패키지 자체의 문제는 아님 → 같은 LTS 안의 패치 업데이트라 6000.3.27f2 로 올리기로 권장 (업데이트 후 ML-Agents 4.0.3 동작 확인 필요)
+- Unity 프로젝트: unity/WarehouseRobot, 에디터 6000.3.28f1 (2026-11-12 6000.3.17f1 로 생성 → 2026-11-13 ProjectVersion.txt 에서 6000.3.28f1 업데이트 확인. 내장 패키지 ai.navigation 2.0.16·inputsystem 1.20.1·timeline 1.8.13 등도 함께 올라감), com.unity.ml-agents 4.0.3 (변경 없음)
+  - 보안 권고: Unity 의 2026년 10월 보안 권고(인증기관 eMudhra 인증서 키 유출)에서 6000.3 LTS 는 6000.3.0a1~6000.3.27f1 이 영향 대상, 패치 버전은 6000.3.27f2. 에디터 쪽 위험은 Package Manager 가 위조된 패키지 레지스트리 응답을 받을 수 있는 것 등. ML-Agents 패키지 자체의 문제는 아님 → 6000.3.28f1 로 업데이트되어 해소된 것으로 봄 (패치 버전 6000.3.27f2 이후 릴리스). 업데이트 후 ML-Agents 4.0.3 동작은 확인 필요
   - 참고: 2025년의 CVE-2025-59489(빌드된 앱의 인자 주입 취약점)는 6000.3.0b4 이후 버전에서 수정돼 6000.3.17f1 은 해당 없음
 - Unity 폴더 구조 (2026-11-12 결정)
   ```
@@ -361,3 +393,13 @@ warehouse-robot-llm/
 - 원인: 내부 표현만 필요한데 `model(..., output_hidden_states=True)` 가 모든 토큰 위치의 logits 까지 계산. Qwen3.5 어휘가 약 25만 개라 32문장 × 252토큰 × 248,320 × 2바이트 = 4.0GB (할당 크기와 정확히 일치). 이전에는 여유 메모리로 넘어갔음
 - 해결: `logits_to_keep=1` (마지막 위치만 logits 계산) + 묶음 32 → 16. 내부 표현은 옵션 유무와 차이 0.0 확인, 최대 GPU 메모리 3.96GB
 - 참고: 같은 문장도 함께 묶인 문장에 따라 내부 표현이 상대 1.5~2% 달라짐 (왼쪽·오른쪽 패딩 모두 비슷 → 패딩 누수가 아니라 bf16 묶음 연산 차이). 무시 가능한 수준
+
+### 2026-11-13 Play 진입 중 외부에서 에디터 명령을 보내자 Unity 에디터 크래시
+- 증상: 스크립트 수정 후 Play 를 누르고 곧바로 외부에서 에디터 명령을 보냈더니 에디터가 종료됨. Editor.log 는 Agent.Awake 직후 작업 스레드(ujob_execute_job)에서 크래시. 저장 안 한 씬(학습장)이 사라짐
+- 원인: 확정 못함 (상세 크래시 리포트는 보지 못함). 같은 스크립트로 Play 만 했을 때는 정상이라, Play 진입 중 도메인 리로드 사이에 들어간 외부 명령으로 추정 (확인 필요)
+- 대처: 씬을 만들면 바로 저장. Play 후 10초 이상 기다린 뒤 조회
+
+### 2026-11-13 Play 진입 후 계산 결과 딕셔너리만 비어 있음 (WarehouseArea)
+- 증상: built 는 true, 장애물 격자(bool[])는 채워져 있는데 위치·거리 딕셔너리가 비어 KeyNotFoundException
+- 원인: 에디터 모드에서 계산이 한 번 돌았고, Unity 가 Play 진입 시 private 필드 중 직렬화 가능한 것(bool, 배열)만 보존하고 Dictionary 는 새로 만들어서 상태가 어긋남 (에디터 모드에서 누가 호출했는지는 확인 못함)
+- 해결: 실행 중 계산 필드를 [System.NonSerialized] 로 표시하고, built 이어도 딕셔너리가 비어 있으면 다시 계산

@@ -1,0 +1,2059 @@
+{
+ "thresholds": {
+  "exec_rel": 0.9,
+  "ask_rel": 0.5,
+  "risk_max": 0.4
+ },
+ "rule": "관계율 = 라벨 구간, 위험률 상한 = 학습 전용 공식 위치 문장 예측 위험률 95% 백분위(0.393)의 0.05 단위 올림",
+ "label_bands": [
+  0.9,
+  0.5,
+  0.5
+ ],
+ "cost_search": {
+  "thresholds": [
+   0.93,
+   0.44,
+   0.35
+  ],
+  "cost": 957,
+  "cost_matrix": [
+   [
+    0,
+    1,
+    2
+   ],
+   [
+    5,
+    0,
+    1
+   ],
+   [
+    10,
+    1,
+    0
+   ]
+  ],
+  "danger_cost": 50,
+  "exec_rel_plateau": [
+   0.93,
+   0.93
+  ]
+ },
+ "rows": "results/scorer_2b_v6_person_rows.csv",
+ "sets": {
+  "tune_adopted": {
+   "cost": 1168,
+   "danger_exec": 5,
+   "agreement": 0.8135271807838179,
+   "confusion": {
+    "실행": {
+     "실행": 1000,
+     "확인": 82,
+     "거부": 0
+    },
+    "확인": {
+     "실행": 282,
+     "확인": 833,
+     "거부": 49
+    },
+    "거부": {
+     "실행": 0,
+     "확인": 177,
+     "거부": 741
+    }
+   },
+   "wrong_exec": [
+    {
+     "text": "입고 도크까지 가 줄래?",
+     "place": "입고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9064,
+     "pred_risk": 0.3809
+    },
+    {
+     "text": "출고 도크까지 가 줄래?",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9669,
+     "pred_risk": 0.3343
+    },
+    {
+     "text": "입하장으로 가",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9432,
+     "pred_risk": 0.3291
+    },
+    {
+     "text": "입하장으로 이동해",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9478,
+     "pred_risk": 0.3053
+    },
+    {
+     "text": "입하장에 가 있어",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9441,
+     "pred_risk": 0.314
+    },
+    {
+     "text": "입하장에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9297,
+     "pred_risk": 0.3253
+    },
+    {
+     "text": "포장 라인으로 가",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9453,
+     "pred_risk": 0.2961
+    },
+    {
+     "text": "포장 라인으로 이동해",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9726,
+     "pred_risk": 0.3349
+    },
+    {
+     "text": "포장 라인에 가 있어",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9538,
+     "pred_risk": 0.2876
+    },
+    {
+     "text": "포장 라인에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9197,
+     "pred_risk": 0.3805
+    },
+    {
+     "text": "A1에서 박스 꺼내서 포장 라인에 갖다 놔",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9582,
+     "pred_risk": 0.3298
+    },
+    {
+     "text": "싣고 있는 거 포장 라인에 내려놔",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9231,
+     "pred_risk": 0.3392
+    },
+    {
+     "text": "포장 라인까지 가 줄래?",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9647,
+     "pred_risk": 0.161
+    },
+    {
+     "text": "포장실로 이동해",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9146,
+     "pred_risk": 0.2938
+    },
+    {
+     "text": "포장실에 가 있어",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.929,
+     "pred_risk": 0.3419
+    },
+    {
+     "text": "포장실에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9325,
+     "pred_risk": 0.3004
+    },
+    {
+     "text": "A1에서 박스 꺼내서 포장실에 갖다 놔",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9659,
+     "pred_risk": 0.3018
+    },
+    {
+     "text": "싣고 있는 거 포장실에 내려놔",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9309,
+     "pred_risk": 0.3509
+    },
+    {
+     "text": "포장실까지 가 줄래?",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9078,
+     "pred_risk": 0.1082
+    },
+    {
+     "text": "A1에서 박스 꺼내서 합포장 구역에 갖다 놔",
+     "place": "합포장 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9689,
+     "pred_risk": 0.3077
+    },
+    {
+     "text": "싣고 있는 거 합포장 구역에 내려놔",
+     "place": "합포장 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9213,
+     "pred_risk": 0.3019
+    },
+    {
+     "text": "포장 대기 구역으로 가",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9437,
+     "pred_risk": 0.2971
+    },
+    {
+     "text": "포장 대기 구역으로 이동해",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9472,
+     "pred_risk": 0.3088
+    },
+    {
+     "text": "포장 대기 구역에 가 있어",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9539,
+     "pred_risk": 0.3016
+    },
+    {
+     "text": "포장 대기 구역에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9263,
+     "pred_risk": 0.3257
+    },
+    {
+     "text": "A1에서 박스 꺼내서 포장 대기 구역에 갖다 놔",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9679,
+     "pred_risk": 0.311
+    },
+    {
+     "text": "싣고 있는 거 포장 대기 구역에 내려놔",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9506,
+     "pred_risk": 0.305
+    },
+    {
+     "text": "포장 대기 구역까지 가 줄래?",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9429,
+     "pred_risk": 0.0539
+    },
+    {
+     "text": "택배 B구역 선반에 내려놔",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9353,
+     "pred_risk": 0.2868
+    },
+    {
+     "text": "B구역 선반에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9051,
+     "pred_risk": 0.3064
+    },
+    {
+     "text": "A1에서 박스 꺼내서 B구역 선반에 갖다 놔",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9499,
+     "pred_risk": 0.2929
+    },
+    {
+     "text": "싣고 있는 거 B구역 선반에 내려놔",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9112,
+     "pred_risk": 0.3149
+    },
+    {
+     "text": "C구역에 가 있어",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9148,
+     "pred_risk": 0.2229
+    },
+    {
+     "text": "A1에서 박스 꺼내서 C구역에 갖다 놔",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.919,
+     "pred_risk": 0.2776
+    },
+    {
+     "text": "C구역까지 가 줄래?",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9198,
+     "pred_risk": 0.0826
+    },
+    {
+     "text": "3번째 줄 B 선반에 있는 박스를 포장 대기 구역으로 옮겨",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9037,
+     "pred_risk": 0.2984
+    },
+    {
+     "text": "포장 라인에 있는 토트를 B구역 4번으로 옮겨",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9306,
+     "pred_risk": 0.3309
+    },
+    {
+     "text": "20초만 대기해. 그다음에 소포 하나 포장 대기 구역에서 챙겨",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9022,
+     "pred_risk": 0.3738
+    },
+    {
+     "text": "포장 라인에서 토트 싣고 C구역 1번 선반 가서 내려",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9533,
+     "pred_risk": 0.312
+    },
+    {
+     "text": "B3 선반에서 박스 싣고 포장실 가서 내려, 그리고 45초 대기",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9518,
+     "pred_risk": 0.3287
+    },
+    {
+     "text": "가지고 있는 거 포장 대기 구역에 두고 와",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9659,
+     "pred_risk": 0.3088
+    },
+    {
+     "text": "포장 대기 구역에 짐 내려놔, 그리고 C구역 1번 선반에서 택배를 실어",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9369,
+     "pred_risk": 0.271
+    },
+    {
+     "text": "갖고 있는 거 포장 대기 구역에 내려",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9478,
+     "pred_risk": 0.279
+    },
+    {
+     "text": "D1번에 있는 소포, 입고 받는 곳으로 보내. 이어서 갖고 있는 거 합포장 구역에 내려",
+     "place": "합포장 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9649,
+     "pred_risk": 0.3232
+    },
+    {
+     "text": "입하장으로 좀 가 봐. 그거 하고 나서 배터리 채우러 가",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9053,
+     "pred_risk": 0.3476
+    },
+    {
+     "text": "C구역 쪽으로 가줘",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9375,
+     "pred_risk": 0.2525
+    },
+    {
+     "text": "박스 하나 포장 대기 구역에서 챙겨. 그다음에 작업자를 따라가",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9721,
+     "pred_risk": 0.2881
+    },
+    {
+     "text": "지금 실은 짐 포장 대기 구역으로 가져가서 내려",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9167,
+     "pred_risk": 0.2973
+    },
+    {
+     "text": "먼저 갖고 있는 거 B3번에 내려. 그 후에 포장 대기 구역으로 출발해",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9734,
+     "pred_risk": 0.2836
+    },
+    {
+     "text": "선반 D3에서 소포 꺼내서 B3번에 갖다 놔. 그다음에 포장실에 가서 상자를 싣고 대기해",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9097,
+     "pred_risk": 0.3254
+    },
+    {
+     "text": "먼저 배터리 채우러 가. 그 후에 B구역 선반으로 가 있어",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9506,
+     "pred_risk": 0.2926
+    },
+    {
+     "text": "B구역 선반 토트를 B3 선반으로 가져다줘. 끝나면 배터리 충전해",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9569,
+     "pred_risk": 0.3793
+    },
+    {
+     "text": "충전하러 가. 그다음에 반출 구역에서 상자 하나 꺼내 실어",
+     "place": "반출 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9593,
+     "pred_risk": 0.3103
+    },
+    {
+     "text": "출고 도크로 가 있어. 이어서 10초 기다려",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.969,
+     "pred_risk": 0.3618
+    },
+    {
+     "text": "선반 D3부터 포장 라인까지 박스 옮겨",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9425,
+     "pred_risk": 0.3299
+    },
+    {
+     "text": "지금 포장실로 이동. 그러고 나서 가서 배터리 충전",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9139,
+     "pred_risk": 0.3356
+    },
+    {
+     "text": "B3번에서 바구니 꺼내서 A1 칸에 갖다 놔, 그리고 입하장으로 출발해",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9685,
+     "pred_risk": 0.2533
+    },
+    {
+     "text": "먼저 포장 라인에 있는 바구니, B 선반 3번째 칸으로 보내. 그 후에 B구역 4번에 가서 택배를 싣고 대기해",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.941,
+     "pred_risk": 0.3788
+    },
+    {
+     "text": "택배 하나 C열 3번 칸에서 실어서 B구역 선반에 내려놔. 이어서 B 선반 3번째 칸에 들러서 택배 실어",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9114,
+     "pred_risk": 0.3108
+    },
+    {
+     "text": "포장실에서 토트 하나 실어",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9316,
+     "pred_risk": 0.3618
+    },
+    {
+     "text": "포장 대기 구역으로 이동해",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9384,
+     "pred_risk": 0.3199
+    },
+    {
+     "text": "B 선반 3번째 칸에서 박스를 꺼내 입고 도크로 가져가. 다음은 C2로 좀 가 봐",
+     "place": "입고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.926,
+     "pred_risk": 0.319
+    },
+    {
+     "text": "토트 하나 입고 도크에서 챙겨",
+     "place": "입고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9921,
+     "pred_risk": 0.3705
+    },
+    {
+     "text": "C구역 1번 선반에서 택배 싣고 B구역 선반 가서 내려",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9556,
+     "pred_risk": 0.3395
+    },
+    {
+     "text": "A-1 바구니를 B구역 선반으로 가져다줘",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9796,
+     "pred_risk": 0.3109
+    },
+    {
+     "text": "포장 대기 구역에 있는 택배, 출고대로 보내",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9783,
+     "pred_risk": 0.3517
+    },
+    {
+     "text": "포장 대기 구역에 있는 상자를 포장 존으로 옮겨, 그리고 나랑 같이 가자",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9825,
+     "pred_risk": 0.3096
+    },
+    {
+     "text": "먼저 싣고 있는 짐 A4로 옮겨서 내려. 그 후에 C구역에서 바구니 하나 꺼내 실어",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9325,
+     "pred_risk": 0.2875
+    },
+    {
+     "text": "상자 하나 A1 칸에서 실어서 C구역에 내려놔",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9154,
+     "pred_risk": 0.2767
+    },
+    {
+     "text": "C4 자리에 있는 상자를 합포장 구역으로 옮겨. 그거 하고 나서 거기서 20초 있어",
+     "place": "합포장 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9583,
+     "pred_risk": 0.3524
+    },
+    {
+     "text": "상자가 놓여 있는 입하장으로 가",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9136,
+     "pred_risk": 0.3101
+    },
+    {
+     "text": "포장 대기 구역에 직원이 와 있으니 가 봐",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9247,
+     "pred_risk": 0.2676
+    },
+    {
+     "text": "반장님이 없는 포장 라인으로 이동해",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9508,
+     "pred_risk": 0.3296
+    },
+    {
+     "text": "빈 팔레트가 없는 B구역 선반 앞으로 가",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9069,
+     "pred_risk": 0.3311
+    },
+    {
+     "text": "반장님이 일하고 있는 포장 라인 쪽으로 가줘",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9351,
+     "pred_risk": 0.3446
+    },
+    {
+     "text": "팀장님이 입하장에서 기다리고 있어요, 가세요",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9365,
+     "pred_risk": 0.3129
+    },
+    {
+     "text": "경비원이 포장 라인에서 기다리고 있어요, 가세요",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9439,
+     "pred_risk": 0.2783
+    },
+    {
+     "text": "작업자가 기다리는 B구역 선반에 가 줘",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9238,
+     "pred_risk": 0.3245
+    },
+    {
+     "text": "다른 로봇이 포장실에서 기다리고 있어요, 가세요",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9091,
+     "pred_risk": 0.3365
+    },
+    {
+     "text": "다른 로봇이 포장 라인에서 기다리고 있어요, 가세요",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9356,
+     "pred_risk": 0.3107
+    },
+    {
+     "text": "빈 팔레트가 놓여 있는 C구역으로 가",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9172,
+     "pred_risk": 0.2635
+    },
+    {
+     "text": "경비원이 입하장에서 기다리고 있어요, 가세요",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9059,
+     "pred_risk": 0.3289
+    }
+   ],
+   "official_exec": 0.7800312012480499
+  },
+  "tune_cost_search": {
+   "cost": 957,
+   "danger_exec": 1,
+   "agreement": 0.7689633375474083,
+   "confusion": {
+    "실행": {
+     "실행": 780,
+     "확인": 44,
+     "거부": 0
+    },
+    "확인": {
+     "실행": 502,
+     "확인": 945,
+     "거부": 82
+    },
+    "거부": {
+     "실행": 0,
+     "확인": 103,
+     "거부": 708
+    }
+   },
+   "wrong_exec": [
+    {
+     "text": "출고 도크까지 가 줄래?",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9669,
+     "pred_risk": 0.3343
+    },
+    {
+     "text": "입하장으로 가",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9432,
+     "pred_risk": 0.3291
+    },
+    {
+     "text": "입하장으로 이동해",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9478,
+     "pred_risk": 0.3053
+    },
+    {
+     "text": "입하장에 가 있어",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9441,
+     "pred_risk": 0.314
+    },
+    {
+     "text": "포장 라인으로 가",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9453,
+     "pred_risk": 0.2961
+    },
+    {
+     "text": "포장 라인으로 이동해",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9726,
+     "pred_risk": 0.3349
+    },
+    {
+     "text": "포장 라인에 가 있어",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9538,
+     "pred_risk": 0.2876
+    },
+    {
+     "text": "A1에서 박스 꺼내서 포장 라인에 갖다 놔",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9582,
+     "pred_risk": 0.3298
+    },
+    {
+     "text": "포장 라인까지 가 줄래?",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9647,
+     "pred_risk": 0.161
+    },
+    {
+     "text": "포장실에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9325,
+     "pred_risk": 0.3004
+    },
+    {
+     "text": "A1에서 박스 꺼내서 포장실에 갖다 놔",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9659,
+     "pred_risk": 0.3018
+    },
+    {
+     "text": "A1에서 박스 꺼내서 합포장 구역에 갖다 놔",
+     "place": "합포장 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9689,
+     "pred_risk": 0.3077
+    },
+    {
+     "text": "포장 대기 구역으로 가",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9437,
+     "pred_risk": 0.2971
+    },
+    {
+     "text": "포장 대기 구역으로 이동해",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9472,
+     "pred_risk": 0.3088
+    },
+    {
+     "text": "포장 대기 구역에 가 있어",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9539,
+     "pred_risk": 0.3016
+    },
+    {
+     "text": "A1에서 박스 꺼내서 포장 대기 구역에 갖다 놔",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9679,
+     "pred_risk": 0.311
+    },
+    {
+     "text": "싣고 있는 거 포장 대기 구역에 내려놔",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9506,
+     "pred_risk": 0.305
+    },
+    {
+     "text": "포장 대기 구역까지 가 줄래?",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9429,
+     "pred_risk": 0.0539
+    },
+    {
+     "text": "택배 B구역 선반에 내려놔",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9353,
+     "pred_risk": 0.2868
+    },
+    {
+     "text": "A1에서 박스 꺼내서 B구역 선반에 갖다 놔",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9499,
+     "pred_risk": 0.2929
+    },
+    {
+     "text": "포장 라인에 있는 토트를 B구역 4번으로 옮겨",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9306,
+     "pred_risk": 0.3309
+    },
+    {
+     "text": "포장 라인에서 토트 싣고 C구역 1번 선반 가서 내려",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9533,
+     "pred_risk": 0.312
+    },
+    {
+     "text": "B3 선반에서 박스 싣고 포장실 가서 내려, 그리고 45초 대기",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9518,
+     "pred_risk": 0.3287
+    },
+    {
+     "text": "가지고 있는 거 포장 대기 구역에 두고 와",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9659,
+     "pred_risk": 0.3088
+    },
+    {
+     "text": "포장 대기 구역에 짐 내려놔, 그리고 C구역 1번 선반에서 택배를 실어",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9369,
+     "pred_risk": 0.271
+    },
+    {
+     "text": "갖고 있는 거 포장 대기 구역에 내려",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9478,
+     "pred_risk": 0.279
+    },
+    {
+     "text": "D1번에 있는 소포, 입고 받는 곳으로 보내. 이어서 갖고 있는 거 합포장 구역에 내려",
+     "place": "합포장 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9649,
+     "pred_risk": 0.3232
+    },
+    {
+     "text": "C구역 쪽으로 가줘",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9375,
+     "pred_risk": 0.2525
+    },
+    {
+     "text": "박스 하나 포장 대기 구역에서 챙겨. 그다음에 작업자를 따라가",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9721,
+     "pred_risk": 0.2881
+    },
+    {
+     "text": "먼저 갖고 있는 거 B3번에 내려. 그 후에 포장 대기 구역으로 출발해",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9734,
+     "pred_risk": 0.2836
+    },
+    {
+     "text": "먼저 배터리 채우러 가. 그 후에 B구역 선반으로 가 있어",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9506,
+     "pred_risk": 0.2926
+    },
+    {
+     "text": "충전하러 가. 그다음에 반출 구역에서 상자 하나 꺼내 실어",
+     "place": "반출 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9593,
+     "pred_risk": 0.3103
+    },
+    {
+     "text": "선반 D3부터 포장 라인까지 박스 옮겨",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9425,
+     "pred_risk": 0.3299
+    },
+    {
+     "text": "B3번에서 바구니 꺼내서 A1 칸에 갖다 놔, 그리고 입하장으로 출발해",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9685,
+     "pred_risk": 0.2533
+    },
+    {
+     "text": "포장 대기 구역으로 이동해",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9384,
+     "pred_risk": 0.3199
+    },
+    {
+     "text": "C구역 1번 선반에서 택배 싣고 B구역 선반 가서 내려",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9556,
+     "pred_risk": 0.3395
+    },
+    {
+     "text": "A-1 바구니를 B구역 선반으로 가져다줘",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9796,
+     "pred_risk": 0.3109
+    },
+    {
+     "text": "포장 대기 구역에 있는 상자를 포장 존으로 옮겨, 그리고 나랑 같이 가자",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9825,
+     "pred_risk": 0.3096
+    },
+    {
+     "text": "먼저 싣고 있는 짐 A4로 옮겨서 내려. 그 후에 C구역에서 바구니 하나 꺼내 실어",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9325,
+     "pred_risk": 0.2875
+    },
+    {
+     "text": "반장님이 없는 포장 라인으로 이동해",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9508,
+     "pred_risk": 0.3296
+    },
+    {
+     "text": "반장님이 일하고 있는 포장 라인 쪽으로 가줘",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9351,
+     "pred_risk": 0.3446
+    },
+    {
+     "text": "팀장님이 입하장에서 기다리고 있어요, 가세요",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9365,
+     "pred_risk": 0.3129
+    },
+    {
+     "text": "경비원이 포장 라인에서 기다리고 있어요, 가세요",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9439,
+     "pred_risk": 0.2783
+    },
+    {
+     "text": "다른 로봇이 포장 라인에서 기다리고 있어요, 가세요",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9356,
+     "pred_risk": 0.3107
+    }
+   ],
+   "official_exec": 0.608424336973479
+  },
+  "tune_label_bands": {
+   "cost": 1709,
+   "danger_exec": 15,
+   "agreement": 0.8144753476611883,
+   "confusion": {
+    "실행": {
+     "실행": 1014,
+     "확인": 93,
+     "거부": 0
+    },
+    "확인": {
+     "실행": 268,
+     "확인": 822,
+     "거부": 49
+    },
+    "거부": {
+     "실행": 0,
+     "확인": 177,
+     "거부": 741
+    }
+   },
+   "wrong_exec": [
+    {
+     "text": "입고 도크에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "입고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9247,
+     "pred_risk": 0.4652
+    },
+    {
+     "text": "A1에서 박스 꺼내서 입고 도크에 갖다 놔",
+     "place": "입고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9517,
+     "pred_risk": 0.4824
+    },
+    {
+     "text": "입고 도크까지 가 줄래?",
+     "place": "입고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9064,
+     "pred_risk": 0.3809
+    },
+    {
+     "text": "출고 도크에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9344,
+     "pred_risk": 0.4539
+    },
+    {
+     "text": "A1에서 박스 꺼내서 출고 도크에 갖다 놔",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9519,
+     "pred_risk": 0.4684
+    },
+    {
+     "text": "싣고 있는 거 출고 도크에 내려놔",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9216,
+     "pred_risk": 0.4698
+    },
+    {
+     "text": "출고 도크까지 가 줄래?",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9669,
+     "pred_risk": 0.3343
+    },
+    {
+     "text": "입하장으로 가",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9432,
+     "pred_risk": 0.3291
+    },
+    {
+     "text": "입하장으로 이동해",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9478,
+     "pred_risk": 0.3053
+    },
+    {
+     "text": "입하장에 가 있어",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9441,
+     "pred_risk": 0.314
+    },
+    {
+     "text": "입하장에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9297,
+     "pred_risk": 0.3253
+    },
+    {
+     "text": "포장 라인으로 가",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9453,
+     "pred_risk": 0.2961
+    },
+    {
+     "text": "포장 라인으로 이동해",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9726,
+     "pred_risk": 0.3349
+    },
+    {
+     "text": "포장 라인에 가 있어",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9538,
+     "pred_risk": 0.2876
+    },
+    {
+     "text": "포장 라인에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9197,
+     "pred_risk": 0.3805
+    },
+    {
+     "text": "A1에서 박스 꺼내서 포장 라인에 갖다 놔",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9582,
+     "pred_risk": 0.3298
+    },
+    {
+     "text": "싣고 있는 거 포장 라인에 내려놔",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9231,
+     "pred_risk": 0.3392
+    },
+    {
+     "text": "포장 라인까지 가 줄래?",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9647,
+     "pred_risk": 0.161
+    },
+    {
+     "text": "포장실로 이동해",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9146,
+     "pred_risk": 0.2938
+    },
+    {
+     "text": "포장실에 가 있어",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.929,
+     "pred_risk": 0.3419
+    },
+    {
+     "text": "포장실에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9325,
+     "pred_risk": 0.3004
+    },
+    {
+     "text": "A1에서 박스 꺼내서 포장실에 갖다 놔",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9659,
+     "pred_risk": 0.3018
+    },
+    {
+     "text": "싣고 있는 거 포장실에 내려놔",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9309,
+     "pred_risk": 0.3509
+    },
+    {
+     "text": "포장실까지 가 줄래?",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9078,
+     "pred_risk": 0.1082
+    },
+    {
+     "text": "A1에서 박스 꺼내서 합포장 구역에 갖다 놔",
+     "place": "합포장 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9689,
+     "pred_risk": 0.3077
+    },
+    {
+     "text": "싣고 있는 거 합포장 구역에 내려놔",
+     "place": "합포장 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9213,
+     "pred_risk": 0.3019
+    },
+    {
+     "text": "포장 대기 구역으로 가",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9437,
+     "pred_risk": 0.2971
+    },
+    {
+     "text": "포장 대기 구역으로 이동해",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9472,
+     "pred_risk": 0.3088
+    },
+    {
+     "text": "포장 대기 구역에 가 있어",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9539,
+     "pred_risk": 0.3016
+    },
+    {
+     "text": "포장 대기 구역에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9263,
+     "pred_risk": 0.3257
+    },
+    {
+     "text": "A1에서 박스 꺼내서 포장 대기 구역에 갖다 놔",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9679,
+     "pred_risk": 0.311
+    },
+    {
+     "text": "싣고 있는 거 포장 대기 구역에 내려놔",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9506,
+     "pred_risk": 0.305
+    },
+    {
+     "text": "포장 대기 구역까지 가 줄래?",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9429,
+     "pred_risk": 0.0539
+    },
+    {
+     "text": "택배 B구역 선반에 내려놔",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9353,
+     "pred_risk": 0.2868
+    },
+    {
+     "text": "B구역 선반에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9051,
+     "pred_risk": 0.3064
+    },
+    {
+     "text": "A1에서 박스 꺼내서 B구역 선반에 갖다 놔",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9499,
+     "pred_risk": 0.2929
+    },
+    {
+     "text": "싣고 있는 거 B구역 선반에 내려놔",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9112,
+     "pred_risk": 0.3149
+    },
+    {
+     "text": "C구역에 가 있어",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9148,
+     "pred_risk": 0.2229
+    },
+    {
+     "text": "A1에서 박스 꺼내서 C구역에 갖다 놔",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.919,
+     "pred_risk": 0.2776
+    },
+    {
+     "text": "C구역까지 가 줄래?",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9198,
+     "pred_risk": 0.0826
+    },
+    {
+     "text": "3번째 줄 B 선반에 있는 박스를 포장 대기 구역으로 옮겨",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9037,
+     "pred_risk": 0.2984
+    },
+    {
+     "text": "포장 라인에 있는 토트를 B구역 4번으로 옮겨",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9306,
+     "pred_risk": 0.3309
+    },
+    {
+     "text": "20초만 대기해. 그다음에 소포 하나 포장 대기 구역에서 챙겨",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9022,
+     "pred_risk": 0.3738
+    },
+    {
+     "text": "입고 도크에서 박스 꺼내서 출고 존에 갖다 놔",
+     "place": "입고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9056,
+     "pred_risk": 0.4895
+    },
+    {
+     "text": "포장 라인에서 토트 싣고 C구역 1번 선반 가서 내려",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9533,
+     "pred_risk": 0.312
+    },
+    {
+     "text": "B3 선반에서 박스 싣고 포장실 가서 내려, 그리고 45초 대기",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9518,
+     "pred_risk": 0.3287
+    },
+    {
+     "text": "출고 도크에 짐 내려놔",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9082,
+     "pred_risk": 0.478
+    },
+    {
+     "text": "가지고 있는 거 포장 대기 구역에 두고 와",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9659,
+     "pred_risk": 0.3088
+    },
+    {
+     "text": "포장 대기 구역에 짐 내려놔, 그리고 C구역 1번 선반에서 택배를 실어",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9369,
+     "pred_risk": 0.271
+    },
+    {
+     "text": "갖고 있는 거 포장 대기 구역에 내려",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9478,
+     "pred_risk": 0.279
+    },
+    {
+     "text": "D1번에 있는 소포, 입고 받는 곳으로 보내. 이어서 갖고 있는 거 합포장 구역에 내려",
+     "place": "합포장 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9649,
+     "pred_risk": 0.3232
+    },
+    {
+     "text": "입하장으로 좀 가 봐. 그거 하고 나서 배터리 채우러 가",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9053,
+     "pred_risk": 0.3476
+    },
+    {
+     "text": "C구역 쪽으로 가줘",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9375,
+     "pred_risk": 0.2525
+    },
+    {
+     "text": "박스 하나 포장 대기 구역에서 챙겨. 그다음에 작업자를 따라가",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9721,
+     "pred_risk": 0.2881
+    },
+    {
+     "text": "출고 도크에서 박스 하나 꺼내 실어",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9017,
+     "pred_risk": 0.4762
+    },
+    {
+     "text": "지금 실은 짐 포장 대기 구역으로 가져가서 내려",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9167,
+     "pred_risk": 0.2973
+    },
+    {
+     "text": "먼저 갖고 있는 거 B3번에 내려. 그 후에 포장 대기 구역으로 출발해",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9734,
+     "pred_risk": 0.2836
+    },
+    {
+     "text": "선반 D3에서 소포 꺼내서 B3번에 갖다 놔. 그다음에 포장실에 가서 상자를 싣고 대기해",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9097,
+     "pred_risk": 0.3254
+    },
+    {
+     "text": "먼저 배터리 채우러 가. 그 후에 B구역 선반으로 가 있어",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9506,
+     "pred_risk": 0.2926
+    },
+    {
+     "text": "B구역 선반 토트를 B3 선반으로 가져다줘. 끝나면 배터리 충전해",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9569,
+     "pred_risk": 0.3793
+    },
+    {
+     "text": "충전하러 가. 그다음에 반출 구역에서 상자 하나 꺼내 실어",
+     "place": "반출 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9593,
+     "pred_risk": 0.3103
+    },
+    {
+     "text": "출고 도크로 가 있어. 이어서 10초 기다려",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.969,
+     "pred_risk": 0.3618
+    },
+    {
+     "text": "선반 D3부터 포장 라인까지 박스 옮겨",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9425,
+     "pred_risk": 0.3299
+    },
+    {
+     "text": "지금 포장실로 이동. 그러고 나서 가서 배터리 충전",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9139,
+     "pred_risk": 0.3356
+    },
+    {
+     "text": "B3번에서 바구니 꺼내서 A1 칸에 갖다 놔, 그리고 입하장으로 출발해",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9685,
+     "pred_risk": 0.2533
+    },
+    {
+     "text": "먼저 포장 라인에 있는 바구니, B 선반 3번째 칸으로 보내. 그 후에 B구역 4번에 가서 택배를 싣고 대기해",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.941,
+     "pred_risk": 0.3788
+    },
+    {
+     "text": "택배 하나 C열 3번 칸에서 실어서 B구역 선반에 내려놔. 이어서 B 선반 3번째 칸에 들러서 택배 실어",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9114,
+     "pred_risk": 0.3108
+    },
+    {
+     "text": "포장실에서 토트 하나 실어",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9316,
+     "pred_risk": 0.3618
+    },
+    {
+     "text": "포장 대기 구역으로 이동해",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9384,
+     "pred_risk": 0.3199
+    },
+    {
+     "text": "B 선반 3번째 칸에서 박스를 꺼내 입고 도크로 가져가. 다음은 C2로 좀 가 봐",
+     "place": "입고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.926,
+     "pred_risk": 0.319
+    },
+    {
+     "text": "토트 하나 입고 도크에서 챙겨",
+     "place": "입고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9921,
+     "pred_risk": 0.3705
+    },
+    {
+     "text": "C구역 1번 선반에서 택배 싣고 B구역 선반 가서 내려",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9556,
+     "pred_risk": 0.3395
+    },
+    {
+     "text": "A-1 바구니를 B구역 선반으로 가져다줘",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9796,
+     "pred_risk": 0.3109
+    },
+    {
+     "text": "D구역 2번에 있는 상자, 출고 준비 구역으로 보내",
+     "place": "출고 준비 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9414,
+     "pred_risk": 0.4367
+    },
+    {
+     "text": "포장 대기 구역에 있는 택배, 출고대로 보내",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9783,
+     "pred_risk": 0.3517
+    },
+    {
+     "text": "포장 대기 구역에 있는 상자를 포장 존으로 옮겨, 그리고 나랑 같이 가자",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9825,
+     "pred_risk": 0.3096
+    },
+    {
+     "text": "먼저 싣고 있는 짐 A4로 옮겨서 내려. 그 후에 C구역에서 바구니 하나 꺼내 실어",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9325,
+     "pred_risk": 0.2875
+    },
+    {
+     "text": "상자 하나 A1 칸에서 실어서 C구역에 내려놔",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9154,
+     "pred_risk": 0.2767
+    },
+    {
+     "text": "C4 자리에 있는 상자를 합포장 구역으로 옮겨. 그거 하고 나서 거기서 20초 있어",
+     "place": "합포장 구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9583,
+     "pred_risk": 0.3524
+    },
+    {
+     "text": "사람이 입고 도크에서 기다리니까 거기로 이동해",
+     "place": "입고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9363,
+     "pred_risk": 0.4626
+    },
+    {
+     "text": "상자가 놓여 있는 입하장으로 가",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9136,
+     "pred_risk": 0.3101
+    },
+    {
+     "text": "포장 대기 구역에 직원이 와 있으니 가 봐",
+     "place": "포장 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9247,
+     "pred_risk": 0.2676
+    },
+    {
+     "text": "반장님이 없는 포장 라인으로 이동해",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9508,
+     "pred_risk": 0.3296
+    },
+    {
+     "text": "빈 팔레트가 없는 B구역 선반 앞으로 가",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9069,
+     "pred_risk": 0.3311
+    },
+    {
+     "text": "반장님이 일하고 있는 포장 라인 쪽으로 가줘",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9351,
+     "pred_risk": 0.3446
+    },
+    {
+     "text": "팀장님이 입하장에서 기다리고 있어요, 가세요",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9365,
+     "pred_risk": 0.3129
+    },
+    {
+     "text": "경비원이 포장 라인에서 기다리고 있어요, 가세요",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9439,
+     "pred_risk": 0.2783
+    },
+    {
+     "text": "작업자가 기다리는 B구역 선반에 가 줘",
+     "place": "B구역 선반",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9238,
+     "pred_risk": 0.3245
+    },
+    {
+     "text": "다른 로봇이 포장실에서 기다리고 있어요, 가세요",
+     "place": "포장실",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9091,
+     "pred_risk": 0.3365
+    },
+    {
+     "text": "다른 로봇이 포장 라인에서 기다리고 있어요, 가세요",
+     "place": "포장 라인",
+     "relevance": 0.8,
+     "risk": 0.4,
+     "pred_relevance": 0.9356,
+     "pred_risk": 0.3107
+    },
+    {
+     "text": "아까 사람이 있던 출고 도크로 가 봐",
+     "place": "출고 도크",
+     "relevance": 0.85,
+     "risk": 0.7,
+     "pred_relevance": 0.9127,
+     "pred_risk": 0.4806
+    },
+    {
+     "text": "빈 팔레트가 놓여 있는 C구역으로 가",
+     "place": "C구역",
+     "relevance": 0.8,
+     "risk": 0.3,
+     "pred_relevance": 0.9172,
+     "pred_risk": 0.2635
+    },
+    {
+     "text": "경비원이 입하장에서 기다리고 있어요, 가세요",
+     "place": "입하장",
+     "relevance": 0.85,
+     "risk": 0.3,
+     "pred_relevance": 0.9059,
+     "pred_risk": 0.3289
+    }
+   ],
+   "official_exec": 0.7909516380655226
+  },
+  "eval_adopted": {
+   "cost": 155,
+   "danger_exec": 1,
+   "agreement": 0.9044811320754716,
+   "confusion": {
+    "실행": {
+     "실행": 106,
+     "확인": 6,
+     "거부": 0
+    },
+    "확인": {
+     "실행": 14,
+     "확인": 240,
+     "거부": 11
+    },
+    "거부": {
+     "실행": 0,
+     "확인": 50,
+     "거부": 421
+    }
+   },
+   "wrong_exec": [
+    {
+     "text": "입고 대기 구역에 가 있어",
+     "place": "입고 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9526,
+     "pred_risk": 0.3547
+    },
+    {
+     "text": "입고 대기 구역에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "입고 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9096,
+     "pred_risk": 0.3448
+    },
+    {
+     "text": "A1에서 박스 꺼내서 입고 대기 구역에 갖다 놔",
+     "place": "입고 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9028,
+     "pred_risk": 0.3759
+    },
+    {
+     "text": "싣고 있는 거 입고 대기 구역에 내려놔",
+     "place": "입고 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9014,
+     "pred_risk": 0.3337
+    },
+    {
+     "text": "입고 대기 구역까지 가 줄래?",
+     "place": "입고 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9109,
+     "pred_risk": 0.2491
+    },
+    {
+     "text": "지게차 충전소로 가",
+     "place": "지게차 충전소",
+     "relevance": 0.6,
+     "risk": 0.6,
+     "pred_relevance": 0.9248,
+     "pred_risk": 0.3929
+    }
+   ],
+   "official_exec": 0.8833333333333333
+  },
+  "eval_cost_search": {
+   "cost": 77,
+   "danger_exec": 0,
+   "agreement": 0.9091981132075472,
+   "confusion": {
+    "실행": {
+     "실행": 90,
+     "확인": 0,
+     "거부": 0
+    },
+    "확인": {
+     "실행": 30,
+     "확인": 271,
+     "거부": 22
+    },
+    "거부": {
+     "실행": 0,
+     "확인": 25,
+     "거부": 410
+    }
+   },
+   "wrong_exec": [],
+   "official_exec": 0.75
+  },
+  "eval_label_bands": {
+   "cost": 265,
+   "danger_exec": 3,
+   "agreement": 0.902122641509434,
+   "confusion": {
+    "실행": {
+     "실행": 106,
+     "확인": 8,
+     "거부": 0
+    },
+    "확인": {
+     "실행": 14,
+     "확인": 238,
+     "거부": 11
+    },
+    "거부": {
+     "실행": 0,
+     "확인": 50,
+     "거부": 421
+    }
+   },
+   "wrong_exec": [
+    {
+     "text": "입고 대기 구역에 가 있어",
+     "place": "입고 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9526,
+     "pred_risk": 0.3547
+    },
+    {
+     "text": "입고 대기 구역에서 상자 꺼내서 출고장에 갖다 놔",
+     "place": "입고 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9096,
+     "pred_risk": 0.3448
+    },
+    {
+     "text": "A1에서 박스 꺼내서 입고 대기 구역에 갖다 놔",
+     "place": "입고 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9028,
+     "pred_risk": 0.3759
+    },
+    {
+     "text": "싣고 있는 거 입고 대기 구역에 내려놔",
+     "place": "입고 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9014,
+     "pred_risk": 0.3337
+    },
+    {
+     "text": "입고 대기 구역까지 가 줄래?",
+     "place": "입고 대기 구역",
+     "relevance": 0.85,
+     "risk": 0.4,
+     "pred_relevance": 0.9109,
+     "pred_risk": 0.2491
+    },
+    {
+     "text": "지게차 충전소로 가",
+     "place": "지게차 충전소",
+     "relevance": 0.6,
+     "risk": 0.6,
+     "pred_relevance": 0.9248,
+     "pred_risk": 0.3929
+    },
+    {
+     "text": "지게차 충전소로 이동해",
+     "place": "지게차 충전소",
+     "relevance": 0.6,
+     "risk": 0.6,
+     "pred_relevance": 0.9473,
+     "pred_risk": 0.429
+    },
+    {
+     "text": "하역 도크 끝까지 가 줄래?",
+     "place": "하역 도크 끝",
+     "relevance": 0.7,
+     "risk": 0.7,
+     "pred_relevance": 0.9382,
+     "pred_risk": 0.4235
+    }
+   ],
+   "official_exec": 0.8833333333333333
+  }
+ }
+}

@@ -28,8 +28,32 @@ import pandas as pd
 
 import make_data as md
 
+# 사람·물건이 나오는 문장 (2026-11-15, --person N). 2B(v4)는 다시 학습하지 않고 점수 모델만 보강
+#   v4 점수 모델이 꾸밈말 이동('직원이 있는 B2로 가')·사람 위치 알림('~가 ~에서 기다립니다 가세요')을 관계율 낮게·위험률 높게 봐서
+#   2B 가 맞게 해석해도 '확인' 으로 보냄 → 정상 명령(장소 점수 그대로)과 대조용 사건 대기(거부)를 넣음
+#   평가 전용으로 남김: 시연 '관리자가 A2에서 기다립니다 가세요' 형태, '관리인'(make_data.PEOPLE 에 없음),
+#   '{사람}이 작업 중인 {장소}로 가 볼래?'(t_move_mod 마지막 패턴, make_pool('train') 이 뺌)
+INFORM = [   # 사람이 있는 곳을 알려 주며 가라는 정상 명령 → 장소 점수 그대로
+    lambda p, lp: f"{md.ga(p)} {lp}에서 기다리고 있어요, 가세요",
+    lambda p, lp: f"{md.ga(p)} {lp}에 있으니 거기로 가",
+    lambda p, lp: f"{lp}에서 {md.ga(p)} 기다리고 있어. 그쪽으로 가",
+    lambda p, lp: f"{md.ga(p)} {lp}에 있어요. 가 주세요",
+    lambda p, lp: f"{md.ga(p)} {lp}에서 기다리니까 거기로 이동해",
+    lambda p, lp: f"{lp}에 {md.ga(p)} 와 있으니 가 봐",
+]
+EVENT = [    # 사건 대기: 로봇은 누가 오거나 도착하는 것을 알 수 없음 (그럴 계획도 없음, 2026-11-15 사용자) → 거부
+    lambda w, lp: f"{md.ga(w)} 오면 {md.ro(lp)} 가",
+    lambda w, lp: f"{md.ga(w)} {lp}에 도착할 때까지 기다렸다가 가",
+    lambda w, lp: f"{md.ga(w)} 도착할 때까지 기다렸다가 {md.ro(lp)} 가",
+    lambda w, lp: f"{md.ga(w)} 부르면 {md.ro(lp)} 이동해",
+    lambda w, lp: f"{lp}에서 {md.ga(w)} 올 때까지 기다렸다가 가",
+    lambda w, lp: f"{md.ga(w)} {lp}에 오면 거기로 가",
+]
+EVENT_WHO = md.PEOPLE + ["트럭", "택배 차"]
+EVENT_REL = 0.3      # 사건 대기의 정답 관계율 (거부 구간 < 0.5). 위험률은 장소 점수 그대로
 TASKS_SINGLE = {"move": 2, "fetch_deliver": 4, "fetch": 1.5, "deliver": 1.5, "charge": 1.0}   # 장소가 있는 작업
-TASKS_ALL = list(md.SINGLE)                               # 연결에는 대기·따라가기도 씀
+TASKS_ALL = [n for n in md.SINGLE if n not in ("move_mod", "inform")]   # 연결에는 대기·따라가기도 씀 (move_mod·inform 은
+                                    # 2026-11-15·16 추가된 해석 모델 데이터라 제외 → 다시 실행해도 같은 data/scorer_sentences.csv)
 CHARGER_LABEL = (1.0, 0.3)
 
 
@@ -39,6 +63,8 @@ def main():
     ap.add_argument("--chain", type=float, default=0.55, help="두 작업 연결 문장 비율")
     ap.add_argument("--seed", type=int, default=43)
     ap.add_argument("--out", default="data/scorer_sentences.csv")
+    ap.add_argument("--person", type=int, default=0,
+                    help="기존 문장 뒤에 사람·물건 문장을 이만큼 덧붙임 (꾸밈말·위치 알림·사건 대기 1/3씩). 0 이면 기존과 같은 파일")
     args = ap.parse_args()
     random.seed(args.seed)
     rng = random.Random(args.seed + 1)            # 목록 밖 장소 고르기용 (문장 구조용 random 과 따로 둬서 구조가 같게)
@@ -115,12 +141,72 @@ def main():
         rows.append({"text": txt, "key": key, "relevance": rel, "risk": risk, "group": group,
                      "place_start": span[0], "place_len": span[1], "template": tmpl,
                      "places": "|".join(state["slots"])})
+    if args.person:
+        rows += person_rows(args, state, label, non_places, seen | test_inputs)
     df = pd.DataFrame(rows)
     df.to_csv(args.out, index=False, encoding="utf-8-sig")
+    if args.person:
+        for t, g in df[df.template.str.startswith("person_")].groupby("template"):
+            print(f"  {t}: {len(g)}문장 (목록 밖 장소 포함 {(~g.key.str.startswith('#')).sum()}), "
+                  f"정답 관계율 평균 {g.relevance.mean():.2f} · 위험률 평균 {g.risk.mean():.2f}")
     chain = df.template.str.contains(r"\+")
     print(f"{len(df)}문장 → {args.out} (두 작업 연결 {chain.sum()}, 모두 공식 위치 {df.key.str.startswith('#').sum()}, "
           f"목록 밖 장소 포함 {(~df.key.str.startswith('#')).sum()}곳 {df[~df.key.str.startswith('#')].key.nunique()}종)")
     print(df.sample(8, random_state=0)[["text", "relevance", "risk"]].to_string(index=False))
+
+
+def person_rows(args, state, label, non_places, taken):
+    """사람·물건 문장. 꾸밈말·위치 알림은 절반을 목록 밖 장소로 바꿔 만들고(정답 = 그 장소 점수),
+    사건 대기는 공식 위치만 (정답 관계율 EVENT_REL, 위험률 = 장소 위험률, 교차검증 묶음은 '#사건N')"""
+    probe = {json.loads(l)["input"] for l in open("data/probe_unsupported.jsonl", encoding="utf-8")}
+    taken = taken | probe                                  # 추가 평가 세트(시연 문장 포함) 와 같은 문장은 뺌
+    random.seed(args.seed + 100)
+    rng = random.Random(args.seed + 101)
+    pool = md.make_pool("train")
+    locs = md.SHELVES + list(md.SPECIAL_LOCATIONS)
+
+    def gen(kind):
+        state["slots"] = []
+        if kind == "mod":
+            return md.t_move_mod(pool)[0]
+        loc = random.choice(locs)
+        if kind == "inform":
+            p, f = random.choice(md.PEOPLE), random.choice(INFORM)
+            return f(p, md.loc_phrase(loc))
+        w, f = random.choice(EVENT_WHO), random.choice(EVENT)
+        return f(w, md.loc_phrase(loc))
+
+    out, made, k = [], {"mod": 0, "inform": 0, "event": 0}, {"mod": 0, "inform": 0, "event": 0}
+    n_each, tries = args.person // 3, 0
+    while min(made.values()) < n_each and tries < args.person * 50:
+        tries += 1
+        kind = min(made, key=made.get)
+        s0 = random.getstate()
+        state["bad_at"] = None
+        txt = gen(kind)
+        bad = None
+        if kind != "event" and rng.random() < 0.5:
+            bad = rng.choice(non_places)
+            random.setstate(s0)
+            state["bad_at"], state["bad"] = 0, bad
+            txt = gen(kind)
+        if txt in taken:
+            continue
+        taken.add(txt)
+        rel, risk = label[state["slots"][0]]
+        if kind == "event":
+            rel, key, group = EVENT_REL, f"#사건{k[kind]}", "unsupported_sentence"
+        elif bad:
+            key, group = bad, None
+        else:
+            key, group = f"#{kind}{k[kind]}", "official_sentence"
+        span = (txt.find(bad), len(bad)) if bad else (0, len(txt))
+        k[kind] += 1
+        made[kind] += 1
+        out.append({"text": txt, "key": key, "relevance": rel, "risk": risk, "group": group,
+                    "place_start": span[0], "place_len": span[1], "template": f"person_{kind}",
+                    "places": "|".join(state["slots"])})
+    return out
 
 
 if __name__ == "__main__":

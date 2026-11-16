@@ -1,0 +1,545 @@
+{
+ "thresholds": {
+  "exec_rel": 0.9,
+  "ask_rel": 0.5,
+  "risk_max": 0.4
+ },
+ "scorer": "outputs/scorer/scorer_2b_v3_sent.pt",
+ "eval_interp_only": {
+  "agreement": 0.6721698113207547,
+  "official_exec_ok": 119,
+  "wrong_exec": 27,
+  "wrong_exec_places": {
+   "입고 대기 구역": 8,
+   "출하 대기 구역": 6,
+   "하역장": 3,
+   "하차장": 3,
+   "피킹 구역": 2,
+   "상차장": 1,
+   "도크": 1,
+   "지게차 충전소": 1,
+   "반송 구역": 1,
+   "계단": 1
+  },
+  "danger_exec": 3,
+  "confusion": {
+   "실행": {
+    "실행": 119,
+    "확인": 26,
+    "거부": 1
+   },
+   "확인": {
+    "실행": 0,
+    "확인": 22,
+    "거부": 2
+   },
+   "거부": {
+    "실행": 1,
+    "확인": 248,
+    "거부": 429
+   }
+  }
+ },
+ "eval_final": {
+  "agreement": 0.7912735849056604,
+  "official_exec_ok": 117,
+  "wrong_exec": 3,
+  "wrong_exec_places": {
+   "입고 대기 구역": 3
+  },
+  "danger_exec": 0,
+  "confusion": {
+   "실행": {
+    "실행": 117,
+    "확인": 3,
+    "거부": 0
+   },
+   "확인": {
+    "실행": 2,
+    "확인": 131,
+    "거부": 9
+   },
+   "거부": {
+    "실행": 1,
+    "확인": 162,
+    "거부": 423
+   }
+  }
+ },
+ "test_interp_only": {
+  "normal_ok": 366,
+  "normal": 369,
+  "unknown_exec": 0,
+  "unknown": 19,
+  "unsupported_rejected": 12,
+  "unsupported": 12
+ },
+ "test_final": {
+  "normal_ok": 307,
+  "normal": 369,
+  "unknown_exec": 0,
+  "unknown": 19,
+  "unsupported_rejected": 12,
+  "unsupported": 12
+ },
+ "test_blocked": [
+  {
+   "input": "A3에 있는 택배를 D-4로 옮겨",
+   "final": "확인",
+   "pred_relevance": 0.932,
+   "pred_risk": 0.416
+  },
+  {
+   "input": "D-2에서 박스 꺼내서 B구역 2번에 갖다 놔. 끝나면 저 작업자 뒤를 따라다녀",
+   "final": "확인",
+   "pred_relevance": 0.8475,
+   "pred_risk": 0.3654
+  },
+  {
+   "input": "먼저 C구역 3번 선반에서 소포 하나 실어. 그 후에 A구역 3번 선반 바구니를 포장 구역으로 가져다줘",
+   "final": "확인",
+   "pred_relevance": 0.8672,
+   "pred_risk": 0.3171
+  },
+  {
+   "input": "A구역 1번 소포를 A2로 가져다줘",
+   "final": "확인",
+   "pred_relevance": 0.899,
+   "pred_risk": 0.3243
+  },
+  {
+   "input": "A3에서 소포 하나 실어. 끝나면 B-3에 바구니 필요해. B구역 4번 선반에서 가져와",
+   "final": "확인",
+   "pred_relevance": 0.8787,
+   "pred_risk": 0.3768
+  },
+  {
+   "input": "지금 C3번으로 이동. 그거 하고 나서 그거 A구역 3번 선반에 놓고 와",
+   "final": "확인",
+   "pred_relevance": 0.8635,
+   "pred_risk": 0.3436
+  },
+  {
+   "input": "배터리 충전해. 끝나면 A구역 3번에 가서 소포를 싣고 대기해",
+   "final": "확인",
+   "pred_relevance": 0.8174,
+   "pred_risk": 0.3485
+  },
+  {
+   "input": "먼저 거기서 60초 있어. 그 후에 충전 좀 하고 와",
+   "final": "확인",
+   "pred_relevance": 0.7903,
+   "pred_risk": 0.3217
+  },
+  {
+   "input": "거기서 60초 있어, 그리고 B구역 2번 선반에서 택배 하나 실어",
+   "final": "확인",
+   "pred_relevance": 0.899,
+   "pred_risk": 0.3208
+  },
+  {
+   "input": "충전 좀 하고 와. 끝나면 싣고 있는 거 출하장에 내려놔",
+   "final": "확인",
+   "pred_relevance": 0.8427,
+   "pred_risk": 0.4628
+  },
+  {
+   "input": "입고 구역으로 가. 그거 하고 나서 가서 충전하고 있어",
+   "final": "확인",
+   "pred_relevance": 0.865,
+   "pred_risk": 0.2819
+  },
+  {
+   "input": "C구역 1번에 있는 소포를 출하장으로 옮겨",
+   "final": "확인",
+   "pred_relevance": 0.8683,
+   "pred_risk": 0.3626
+  },
+  {
+   "input": "B1번에 있는 택배를 D구역 2번으로 옮겨",
+   "final": "확인",
+   "pred_relevance": 0.9475,
+   "pred_risk": 0.4091
+  },
+  {
+   "input": "B구역 2번 바구니 챙겨. 그다음에 D구역 1번에 있는 택배를 포장 구역으로 옮겨",
+   "final": "확인",
+   "pred_relevance": 0.8779,
+   "pred_risk": 0.3446
+  },
+  {
+   "input": "A구역 2번에서 출고 구역까지 박스 운반해. 다 하면 따라와 줘",
+   "final": "확인",
+   "pred_relevance": 0.8833,
+   "pred_risk": 0.38
+  },
+  {
+   "input": "D열 2번 칸에서 B구역 1번 선반까지 택배 운반해. 다 하면 따라와 줘",
+   "final": "확인",
+   "pred_relevance": 0.8584,
+   "pred_risk": 0.4021
+  },
+  {
+   "input": "C열 4번 칸에서 C3번까지 바구니 운반해. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.8879,
+   "pred_risk": 0.4865
+  },
+  {
+   "input": "C-2에서 C구역 1번까지 택배 운반해. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.8867,
+   "pred_risk": 0.4943
+  },
+  {
+   "input": "B2에서 D구역 1번 선반까지 박스 운반해. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.9459,
+   "pred_risk": 0.4883
+  },
+  {
+   "input": "D-3에서 C3까지 박스 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8929,
+   "pred_risk": 0.4254
+  },
+  {
+   "input": "D구역 4번에서 포장대까지 바구니 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8906,
+   "pred_risk": 0.3509
+  },
+  {
+   "input": "A구역 2번에서 B열 1번 칸까지 택배 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8401,
+   "pred_risk": 0.4028
+  },
+  {
+   "input": "B4번에서 입고대까지 소포 운반해. 다 하면 작업자분을 계속 따라가",
+   "final": "확인",
+   "pred_relevance": 0.855,
+   "pred_risk": 0.4898
+  },
+  {
+   "input": "D-1에 있는 토트 좀 실어 줘. 다 하면 C4번에서 C열 2번 칸까지 토트 운반해",
+   "final": "확인",
+   "pred_relevance": 0.9299,
+   "pred_risk": 0.412
+  },
+  {
+   "input": "A구역 2번 선반에 있는 토트 좀 실어 줘. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.8512,
+   "pred_risk": 0.5797
+  },
+  {
+   "input": "C구역 3번에서 포장대까지 택배 운반해. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.8112,
+   "pred_risk": 0.5002
+  },
+  {
+   "input": "B1에서 A-3까지 소포 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8547,
+   "pred_risk": 0.3903
+  },
+  {
+   "input": "D-2에서 출하장까지 바구니 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8047,
+   "pred_risk": 0.3866
+  },
+  {
+   "input": "D구역 2번 선반에서 A열 3번 칸까지 상자 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8869,
+   "pred_risk": 0.3446
+  },
+  {
+   "input": "짐 B구역 3번 선반에 내려 줘. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.8941,
+   "pred_risk": 0.5518
+  },
+  {
+   "input": "C구역 3번 선반에 있는 박스 좀 실어 줘. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.88,
+   "pred_risk": 0.5499
+  },
+  {
+   "input": "충전 스테이션에서 배터리 채워. 다 하면 1분 동안 멈춰 있어",
+   "final": "확인",
+   "pred_relevance": 0.9241,
+   "pred_risk": 0.5481
+  },
+  {
+   "input": "B구역 2번 선반에서 C3번까지 토트 운반해. 다 하면 20초 동안 멈춰 있어",
+   "final": "확인",
+   "pred_relevance": 0.8631,
+   "pred_risk": 0.4352
+  },
+  {
+   "input": "A-2에서 D구역 4번 선반까지 박스 운반해. 다 하면 A구역 4번에 있는 택배 좀 실어 줘",
+   "final": "확인",
+   "pred_relevance": 0.8555,
+   "pred_risk": 0.4305
+  },
+  {
+   "input": "B열 4번 칸에서 C열 2번 칸까지 박스 운반해. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.9365,
+   "pred_risk": 0.4793
+  },
+  {
+   "input": "A4에서 A-3까지 택배 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8006,
+   "pred_risk": 0.4182
+  },
+  {
+   "input": "D2번에서 C열 4번 칸까지 박스 운반해",
+   "final": "확인",
+   "pred_relevance": 0.9719,
+   "pred_risk": 0.4327
+  },
+  {
+   "input": "충전 스테이션에서 배터리 채워. 다 하면 짐 D1에 내려 줘",
+   "final": "확인",
+   "pred_relevance": 0.8552,
+   "pred_risk": 0.5409
+  },
+  {
+   "input": "D열 4번 칸에 있는 소포 좀 실어 줘. 다 하면 D열 4번 칸에서 C구역 1번 선반까지 상자 운반해",
+   "final": "확인",
+   "pred_relevance": 0.9748,
+   "pred_risk": 0.5027
+  },
+  {
+   "input": "5분 동안 멈춰 있어. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.9938,
+   "pred_risk": 0.4368
+  },
+  {
+   "input": "A구역 1번에서 C구역 3번 선반까지 택배 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8708,
+   "pred_risk": 0.3685
+  },
+  {
+   "input": "B-2에서 C구역 2번 선반까지 소포 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8752,
+   "pred_risk": 0.3602
+  },
+  {
+   "input": "충전 스테이션에서 배터리 채워. 다 하면 작업자분을 계속 따라가",
+   "final": "확인",
+   "pred_relevance": 0.9521,
+   "pred_risk": 0.5687
+  },
+  {
+   "input": "C구역 3번 선반에서 A구역 1번 선반까지 박스 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8932,
+   "pred_risk": 0.3502
+  },
+  {
+   "input": "D2에서 D-3까지 상자 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8451,
+   "pred_risk": 0.4032
+  },
+  {
+   "input": "1분 동안 멈춰 있어. 다 하면 D-2에서 D3번까지 박스 운반해",
+   "final": "확인",
+   "pred_relevance": 0.9854,
+   "pred_risk": 0.437
+  },
+  {
+   "input": "D4번에서 C구역 4번까지 소포 운반해. 다 하면 3분 동안 멈춰 있어",
+   "final": "확인",
+   "pred_relevance": 0.9194,
+   "pred_risk": 0.4134
+  },
+  {
+   "input": "충전 스테이션에서 배터리 채워. 다 하면 짐 D열 3번 칸에 내려 줘",
+   "final": "확인",
+   "pred_relevance": 0.8795,
+   "pred_risk": 0.4925
+  },
+  {
+   "input": "A3번에서 A구역 1번까지 토트 운반해. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.8662,
+   "pred_risk": 0.4632
+  },
+  {
+   "input": "D-4에 있는 바구니 좀 실어 줘. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.8979,
+   "pred_risk": 0.5236
+  },
+  {
+   "input": "짐 C4에 내려 줘. 다 하면 A2번에서 C구역 3번까지 택배 운반해",
+   "final": "확인",
+   "pred_relevance": 0.89,
+   "pred_risk": 0.4824
+  },
+  {
+   "input": "B구역 4번 선반에서 C구역 3번까지 택배 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8746,
+   "pred_risk": 0.3616
+  },
+  {
+   "input": "D4번에 있는 상자 좀 실어 줘. 다 하면 충전 스테이션에서 배터리 채워",
+   "final": "확인",
+   "pred_relevance": 0.888,
+   "pred_risk": 0.5798
+  },
+  {
+   "input": "D-2에서 D구역 1번 선반까지 바구니 운반해. 다 하면 짐 A구역 2번 선반에 내려 줘",
+   "final": "확인",
+   "pred_relevance": 0.8755,
+   "pred_risk": 0.3415
+  },
+  {
+   "input": "A구역 1번 선반에서 C1번까지 토트 운반해. 다 하면 작업자분을 계속 따라가",
+   "final": "확인",
+   "pred_relevance": 0.8578,
+   "pred_risk": 0.4912
+  },
+  {
+   "input": "10초 동안 멈춰 있어. 다 하면 C4에서 B-4까지 소포 운반해",
+   "final": "확인",
+   "pred_relevance": 0.987,
+   "pred_risk": 0.4701
+  },
+  {
+   "input": "A2번에서 입고대까지 토트 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8832,
+   "pred_risk": 0.4176
+  },
+  {
+   "input": "짐 출하장에 내려 줘",
+   "final": "확인",
+   "pred_relevance": 0.8952,
+   "pred_risk": 0.3509
+  },
+  {
+   "input": "A-3에서 입고대까지 박스 운반해",
+   "final": "확인",
+   "pred_relevance": 0.849,
+   "pred_risk": 0.4581
+  },
+  {
+   "input": "B-2에서 A열 1번 칸까지 택배 운반해",
+   "final": "확인",
+   "pred_relevance": 0.8581,
+   "pred_risk": 0.4087
+  },
+  {
+   "input": "짐 B열 3번 칸에 내려 줘. 다 하면 A열 4번 칸에서 B열 4번 칸까지 상자 운반해",
+   "final": "확인",
+   "pred_relevance": 0.9486,
+   "pred_risk": 0.486
+  }
+ ],
+ "candidates": [
+  {
+   "th": [
+    0.85,
+    0.5,
+    0.5
+   ],
+   "eval_official_ok": 118,
+   "eval_wrong_exec": 9,
+   "eval_wrong_places": 2,
+   "eval_danger": 0,
+   "test_normal_ok": 348,
+   "test_single_ok": 230,
+   "test_multi_ok": 118,
+   "test_unknown_exec": 0
+  },
+  {
+   "th": [
+    0.9,
+    0.5,
+    0.5
+   ],
+   "eval_official_ok": 117,
+   "eval_wrong_exec": 3,
+   "eval_wrong_places": 1,
+   "eval_danger": 0,
+   "test_normal_ok": 318,
+   "test_single_ok": 217,
+   "test_multi_ok": 101,
+   "test_unknown_exec": 0
+  },
+  {
+   "th": [
+    0.9,
+    0.5,
+    0.45
+   ],
+   "eval_official_ok": 117,
+   "eval_wrong_exec": 3,
+   "eval_wrong_places": 1,
+   "eval_danger": 0,
+   "test_normal_ok": 314,
+   "test_single_ok": 217,
+   "test_multi_ok": 97,
+   "test_unknown_exec": 0
+  },
+  {
+   "th": [
+    0.9,
+    0.5,
+    0.4
+   ],
+   "eval_official_ok": 117,
+   "eval_wrong_exec": 3,
+   "eval_wrong_places": 1,
+   "eval_danger": 0,
+   "test_normal_ok": 307,
+   "test_single_ok": 214,
+   "test_multi_ok": 93,
+   "test_unknown_exec": 0
+  },
+  {
+   "th": [
+    0.9,
+    0.5,
+    0.35
+   ],
+   "eval_official_ok": 117,
+   "eval_wrong_exec": 3,
+   "eval_wrong_places": 1,
+   "eval_danger": 0,
+   "test_normal_ok": 263,
+   "test_single_ok": 186,
+   "test_multi_ok": 77,
+   "test_unknown_exec": 0
+  },
+  {
+   "th": [
+    0.92,
+    0.5,
+    0.5
+   ],
+   "eval_official_ok": 112,
+   "eval_wrong_exec": 1,
+   "eval_wrong_places": 1,
+   "eval_danger": 0,
+   "test_normal_ok": 294,
+   "test_single_ok": 204,
+   "test_multi_ok": 90,
+   "test_unknown_exec": 0
+  }
+ ]
+}

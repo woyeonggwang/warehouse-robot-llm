@@ -1,0 +1,129 @@
+{
+ "args": {
+  "probe": "data/probe_unsupported.jsonl",
+  "model": "outputs/qwen35_2b_v2_strict/merged",
+  "prompt": "strict",
+  "scorer": "outputs/scorer/scorer_2b_strict_sent.pt",
+  "thresholds": "results/thresholds.json",
+  "judge": false,
+  "name": "probe_2b_v2"
+ },
+ "groups": {
+  "unsupported/unsup_combo/heldout": {
+   "n": 15,
+   "action_ok": 13,
+   "reason_or_plan_ok": 1,
+   "actions": {
+    "거부": 13,
+    "확인": 2
+   }
+  },
+  "unsupported/unsup_event/seen": {
+   "n": 20,
+   "action_ok": 6,
+   "reason_or_plan_ok": 4,
+   "actions": {
+    "확인": 13,
+    "실행": 1,
+    "거부": 6
+   }
+  },
+  "unsupported/unsup_event/heldout": {
+   "n": 20,
+   "action_ok": 1,
+   "reason_or_plan_ok": 0,
+   "actions": {
+    "확인": 18,
+    "실행": 1,
+    "거부": 1
+   }
+  },
+  "unsupported/unsup_object/seen": {
+   "n": 20,
+   "action_ok": 9,
+   "reason_or_plan_ok": 8,
+   "actions": {
+    "확인": 9,
+    "실행": 2,
+    "거부": 9
+   }
+  },
+  "unsupported/unsup_object/heldout": {
+   "n": 10,
+   "action_ok": 6,
+   "reason_or_plan_ok": 5,
+   "actions": {
+    "확인": 4,
+    "거부": 6
+   }
+  },
+  "unsupported/unsup_race/seen": {
+   "n": 20,
+   "action_ok": 1,
+   "reason_or_plan_ok": 0,
+   "actions": {
+    "확인": 19,
+    "거부": 1
+   }
+  },
+  "unsupported/unsup_race/heldout": {
+   "n": 20,
+   "action_ok": 0,
+   "reason_or_plan_ok": 0,
+   "actions": {
+    "확인": 20
+   }
+  },
+  "control/control_first/seen": {
+   "n": 10,
+   "action_ok": 5,
+   "reason_or_plan_ok": 10,
+   "actions": {
+    "확인": 5,
+    "실행": 5
+   }
+  },
+  "control/control_move/seen": {
+   "n": 10,
+   "action_ok": 9,
+   "reason_or_plan_ok": 10,
+   "actions": {
+    "실행": 9,
+    "확인": 1
+   }
+  },
+  "control/control_then/seen": {
+   "n": 10,
+   "action_ok": 9,
+   "reason_or_plan_ok": 10,
+   "actions": {
+    "실행": 9,
+    "확인": 1
+   }
+  },
+  "demo/demo/heldout": {
+   "n": 2,
+   "action_ok": 1,
+   "reason_or_plan_ok": 0,
+   "actions": {
+    "실행": 1,
+    "거부": 1
+   }
+  }
+ },
+ "unsupported": {
+  "n": 125,
+  "action_ok": 36,
+  "reason_or_plan_ok": 18
+ },
+ "control": {
+  "n": 30,
+  "action_ok": 23,
+  "reason_or_plan_ok": 30
+ },
+ "demo": {
+  "n": 2,
+  "action_ok": 1,
+  "reason_or_plan_ok": 0
+ }
+}

@@ -73,6 +73,7 @@ def main():
     ap.add_argument("--repeats", type=int, default=3, help="장소 분할을 바꿔 반복한 예측의 평균을 씀")
     ap.add_argument("--reuse_rows", action="store_true", help="저장된 문장별 예측으로 기준값만 다시 정함")
     ap.add_argument("--risk_pct", type=float, default=95, help="위험률 상한 = 공식 위치 문장 예측 위험률의 이 백분위")
+    ap.add_argument("--out", default="results/thresholds.json", help="기준값 결과 파일 (다른 해석 모델이면 다른 이름으로)")
     args = ap.parse_args()
     rows_path = f"results/{args.name}_rows.csv"
     if args.reuse_rows and os.path.exists(rows_path):
@@ -161,9 +162,9 @@ def select_and_report(df, args, rows_path):
             if name == "eval" and len(wrong):
                 for p, n in wrong.place.value_counts().items():
                     print(f"    잘못 실행: {p} ({n}/8 문장)")
-    with open("results/thresholds.json", "w", encoding="utf-8") as f:
+    with open(args.out, "w", encoding="utf-8") as f:
         json.dump(summary, f, ensure_ascii=False, indent=1)
-    print(f"\n저장: results/thresholds.json ({rows_path} 기준)")
+    print(f"\n저장: {args.out} ({rows_path} 기준)")
 
 
 if __name__ == "__main__":

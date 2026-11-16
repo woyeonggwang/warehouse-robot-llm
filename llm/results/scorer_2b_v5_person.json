@@ -1,0 +1,896 @@
+{
+ "model": "outputs/qwen35_2b_v5_strict/merged",
+ "prompt": "strict",
+ "labels": "data/labels.csv",
+ "extra": "data/labels_add.csv,data/labels_alias.csv",
+ "sentences": "data/scorer_sentences_person.csv",
+ "n_rows": 4012,
+ "n_trainable": 3534,
+ "heldout_patterns": [
+  "{p}까지 가 줄래?",
+  "택배 {p}에 내려놔"
+ ],
+ "method": "ensemble",
+ "ens_configs": [
+  [
+   "last",
+   9
+  ],
+  [
+   "last",
+   11
+  ],
+  [
+   "last",
+   13
+  ],
+  [
+   "last",
+   15
+  ],
+  [
+   "last",
+   17
+  ],
+  [
+   "last",
+   19
+  ],
+  [
+   "last",
+   21
+  ]
+ ],
+ "n_places": 106,
+ "n_extra": 1279,
+ "baseline_mae": [
+  0.420203072174904,
+  0.162885683975599
+ ],
+ "repeats": 2,
+ "nested": {
+  "mae": [
+   0.08170577708576945,
+   0.09259364076240398
+  ],
+  "mae_std": [
+   0.0006042818281082815,
+   0.0004362669507223457
+  ],
+  "rho": [
+   0.9235985034958857,
+   0.794484550423541
+  ],
+  "spread_mean": [
+   0.011735151646465661,
+   0.017965564904855076
+  ],
+  "spread_max": [
+   0.06716608681684427,
+   0.10173285937146137
+  ],
+  "action_flips": [
+   "반품 구역",
+   "불량품 구역",
+   "계량대"
+  ],
+  "chosen": [
+   [
+    {
+     "fold": 0,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 0,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 100.0
+    },
+    {
+     "fold": 1,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 1,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 100.0
+    },
+    {
+     "fold": 2,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 2,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 3,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 3,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 4,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 4,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    }
+   ],
+   [
+    {
+     "fold": 0,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 0,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 1,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 1,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 2,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 2,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 100.0
+    },
+    {
+     "fold": 3,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 3,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 4,
+     "target": "relevance",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 10.0
+    },
+    {
+     "fold": 4,
+     "target": "risk",
+     "configs": [
+      [
+       "last",
+       9
+      ],
+      [
+       "last",
+       11
+      ],
+      [
+       "last",
+       13
+      ],
+      [
+       "last",
+       15
+      ],
+      [
+       "last",
+       17
+      ],
+      [
+       "last",
+       19
+      ],
+      [
+       "last",
+       21
+      ]
+     ],
+     "alpha": 100.0
+    }
+   ]
+  ]
+ },
+ "selected": {
+  "relevance": {
+   "configs": [
+    [
+     "last",
+     9
+    ],
+    [
+     "last",
+     11
+    ],
+    [
+     "last",
+     13
+    ],
+    [
+     "last",
+     15
+    ],
+    [
+     "last",
+     17
+    ],
+    [
+     "last",
+     19
+    ],
+    [
+     "last",
+     21
+    ]
+   ],
+   "alpha": 10.0,
+   "mae": 0.08231005891392452,
+   "rho": 0.922219034358004
+  },
+  "risk": {
+   "configs": [
+    [
+     "last",
+     9
+    ],
+    [
+     "last",
+     11
+    ],
+    [
+     "last",
+     13
+    ],
+    [
+     "last",
+     15
+    ],
+    [
+     "last",
+     17
+    ],
+    [
+     "last",
+     19
+    ],
+    [
+     "last",
+     21
+    ]
+   ],
+   "alpha": 10.0,
+   "mae": 0.09122522757340462,
+   "rho": 0.8036828034437593
+  }
+ },
+ "high_risk": {
+  "threshold": 0.8,
+  "n": 14,
+  "true_mean": 0.9000000000000001,
+  "pred_mean": 0.7354999999999999,
+  "pred_below_risk_max": [
+   "주차장"
+  ]
+ },
+ "risk_slope": 0.6848863111842503,
+ "under_mean": 0.039547169811320754,
+ "under_02": 5,
+ "decision": {
+  "exec_rel": 0.9,
+  "ask_rel": 0.5,
+  "risk_max": 0.5,
+  "agreement": 0.9622641509433962,
+  "confusion": {
+   "실행": {
+    "실행": 15,
+    "확인": 1,
+    "거부": 0
+   },
+   "확인": {
+    "실행": 0,
+    "확인": 33,
+    "거부": 0
+   },
+   "거부": {
+    "실행": 0,
+    "확인": 3,
+    "거부": 54
+   }
+  },
+  "wrong_exec": [
+   "입고 대기 구역"
+  ],
+  "wrong_reject": []
+ },
+ "grid": []
+}

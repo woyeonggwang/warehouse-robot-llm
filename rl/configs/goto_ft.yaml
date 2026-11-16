@@ -1,0 +1,29 @@
+# go_to 이어서 학습 (goto_v1 에서 출발): 시작 위치 검사·경로 여유 0.55m·후진 0.5 m/s 제한을 넣은 환경에 맞춰 다듬기
+# 실행 (conda 환경 mlagents, 저장소 루트):
+#   mlagents-learn rl/configs/goto_ft.yaml --run-id goto_v2 --initialize-from goto_v1 --results-dir rl/results
+#   → Unity Play (씬은 Warehouse > Mode: Training 상태여야 함)
+behaviors:
+  GoTo:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 1024
+      buffer_size: 20480
+      learning_rate: 1.0e-4      # 이미 학습된 모델이라 처음(3e-4)보다 작게
+      beta: 2.0e-3
+      epsilon: 0.15
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: linear
+    network_settings:
+      normalize: true
+      hidden_units: 256
+      num_layers: 2
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    max_steps: 2000000
+    time_horizon: 256
+    summary_freq: 20000
+    checkpoint_interval: 500000
+    keep_checkpoints: 5

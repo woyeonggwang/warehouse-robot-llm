@@ -37,7 +37,15 @@ public static class WarehouseLayout
     public static Vector3 ShelfDock(int row, int bay) =>
         new Vector3(BayX[bay], 0f, RowZ[row] - RackDepth * 0.5f - DockGap);
 
-    public static readonly string[] ObstacleTags = { "Wall", "Shelf", "Station" };
+    public static readonly string[] ObstacleTags = { "Wall", "Shelf", "Station" };   // 고정 장애물 (경로 계획 격자에 들어감)
+    public static readonly string[] DynamicTags = { "Worker" };                       // 움직이는 장애물 (경로 계획에는 없음, 충돌·광선 센서에만)
+
+    public static bool IsAnyObstacle(Collider c)
+    {
+        foreach (var t in ObstacleTags) if (c.CompareTag(t)) return true;
+        foreach (var t in DynamicTags) if (c.CompareTag(t)) return true;
+        return false;
+    }
 }
 
 /// <summary>
@@ -47,7 +55,11 @@ public static class WarehouseLayout
 public class WarehouseArea : MonoBehaviour
 {
     [Tooltip("격자 한 칸 크기 (m)")] public float cell = 0.25f;
-    [Tooltip("로봇 크기만큼 장애물을 부풀리는 반경 (m)")] public float inflate = 0.4f;
+    [Tooltip("로봇 크기만큼 장애물을 부풀리는 반경 (m). 경로가 장애물에 이만큼 이상 떨어져 지나감. 0.4 → 0.55 (2026-11-13, 회전하는 로봇 반지름 약 0.49m 가 줄 끝 모서리를 긁던 문제)")]
+    public float inflate = 0.55f;
+    [Tooltip("시작 위치 겹침 검사용 로봇 몸체 반크기 (보조바퀴·바퀴 포함 + 여유)")]
+    public Vector3 robotHalfExtents = new Vector3(0.42f, 0.25f, 0.5f);
+    [Tooltip("움직이는 장애물(작업자) 수. 0 이면 없음")] public int workerCount = 0;
 
     // 실행 중 계산 결과는 직렬화하지 않음 (Unity 가 private 배열·bool 을 플레이 진입 시 보존해서
     // 딕셔너리만 비고 built 는 true 로 남는 문제가 있었음)
@@ -59,6 +71,26 @@ public class WarehouseArea : MonoBehaviour
     [System.NonSerialized] bool built;
 
     public string[] LocationNames { get { EnsureBuilt(); return names; } }
+
+    void Start()
+    {
+        if (workerCount <= 0) return;
+        EnsureBuilt();                 // 고정 장애물 격자를 작업자보다 먼저 만듦
+        WarehouseNavMesh.Ensure();     // 작업자가 걸을 NavMesh (작업자 콜라이더는 빼고 생성)
+        for (int i = 0; i < workerCount; i++) WorkerWalker.Create(this, RandomFreePoint(), i);
+    }
+
+    /// 빈 칸 중 하나 (월드 좌표)
+    public Vector3 RandomFreePoint()
+    {
+        EnsureBuilt();
+        for (int tries = 0; tries < 1000; tries++)
+        {
+            int i = Random.Range(0, free.Length);
+            if (free[i]) return transform.TransformPoint(CellCenter(i % nx, i / nx));
+        }
+        return transform.position;
+    }
 
     public Transform GetLocation(string name) { EnsureBuilt(); return locations[name]; }
 
@@ -218,13 +250,18 @@ public class WarehouseArea : MonoBehaviour
     {
         EnsureBuilt();
         var d = dist[target];
-        for (int tries = 0; tries < 500; tries++)
+        for (int tries = 0; tries < 2000; tries++)
         {
             int i = Random.Range(0, d.Length);
             if (!free[i] || float.IsInfinity(d[i]) || d[i] < minGeo) continue;
             Vector3 local = CellCenter(i % nx, i / nx);
             worldPos = transform.TransformPoint(local);
             worldRot = transform.rotation * Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+            // 실제 몸체 크기·방향으로 장애물과 겹치는지 확인 (격자 검사만으로는 무작위 방향의 모서리가 걸렸음)
+            bool hit = false;
+            foreach (var col in Physics.OverlapBox(worldPos + Vector3.up * 0.3f, robotHalfExtents * 1.0f + (workerCount > 0 ? new Vector3(0.3f, 0f, 0.3f) : Vector3.zero), worldRot, ~0, QueryTriggerInteraction.Ignore))
+                if (WarehouseLayout.IsAnyObstacle(col)) { hit = true; break; }   // 작업자 바로 옆에서도 시작하지 않게 (작업자가 있으면 여유 0.3m 추가)
+            if (hit) continue;
             return;
         }
         worldPos = transform.TransformPoint(new Vector3(0f, 0f, -8.5f));

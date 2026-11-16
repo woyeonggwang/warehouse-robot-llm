@@ -1,0 +1,205 @@
+{
+ "args": {
+  "probe": "data/probe_unsupported.jsonl",
+  "model": "outputs/qwen35_2b_v4_strict/merged",
+  "prompt": "strict",
+  "scorer": "outputs/scorer/scorer_2b_v4_person.pt",
+  "thresholds": "results/thresholds_2b_v4_person.json",
+  "judge": false,
+  "name": "probe3_2b_v4_person"
+ },
+ "groups": {
+  "unsupported/unsup_check/seen": {
+   "n": 20,
+   "action_ok": 20,
+   "reason_or_plan_ok": 20,
+   "actions": {
+    "거부": 20
+   }
+  },
+  "unsupported/unsup_check/heldout": {
+   "n": 20,
+   "action_ok": 20,
+   "reason_or_plan_ok": 20,
+   "actions": {
+    "거부": 20
+   }
+  },
+  "unsupported/unsup_combo/heldout": {
+   "n": 15,
+   "action_ok": 15,
+   "reason_or_plan_ok": 15,
+   "actions": {
+    "거부": 15
+   }
+  },
+  "unsupported/unsup_event/seen": {
+   "n": 20,
+   "action_ok": 20,
+   "reason_or_plan_ok": 20,
+   "actions": {
+    "거부": 20
+   }
+  },
+  "unsupported/unsup_event/heldout": {
+   "n": 20,
+   "action_ok": 20,
+   "reason_or_plan_ok": 20,
+   "actions": {
+    "거부": 20
+   }
+  },
+  "unsupported/unsup_object/seen": {
+   "n": 20,
+   "action_ok": 20,
+   "reason_or_plan_ok": 20,
+   "actions": {
+    "거부": 20
+   }
+  },
+  "unsupported/unsup_object/heldout": {
+   "n": 10,
+   "action_ok": 9,
+   "reason_or_plan_ok": 9,
+   "actions": {
+    "거부": 9,
+    "확인": 1
+   }
+  },
+  "unsupported/unsup_race/seen": {
+   "n": 20,
+   "action_ok": 20,
+   "reason_or_plan_ok": 20,
+   "actions": {
+    "거부": 20
+   }
+  },
+  "unsupported/unsup_race/heldout": {
+   "n": 20,
+   "action_ok": 20,
+   "reason_or_plan_ok": 20,
+   "actions": {
+    "거부": 20
+   }
+  },
+  "control/control_first/seen": {
+   "n": 10,
+   "action_ok": 8,
+   "reason_or_plan_ok": 10,
+   "actions": {
+    "실행": 8,
+    "확인": 2
+   }
+  },
+  "control/control_inform/seen": {
+   "n": 20,
+   "action_ok": 10,
+   "reason_or_plan_ok": 0,
+   "actions": {
+    "거부": 8,
+    "실행": 10,
+    "확인": 2
+   }
+  },
+  "control/control_inform/heldout": {
+   "n": 20,
+   "action_ok": 3,
+   "reason_or_plan_ok": 0,
+   "actions": {
+    "거부": 8,
+    "확인": 9,
+    "실행": 3
+   }
+  },
+  "control/control_mod/seen": {
+   "n": 20,
+   "action_ok": 19,
+   "reason_or_plan_ok": 17,
+   "actions": {
+    "실행": 19,
+    "확인": 1
+   }
+  },
+  "control/control_mod/heldout": {
+   "n": 20,
+   "action_ok": 12,
+   "reason_or_plan_ok": 12,
+   "actions": {
+    "거부": 8,
+    "실행": 12
+   }
+  },
+  "control/control_move/seen": {
+   "n": 10,
+   "action_ok": 10,
+   "reason_or_plan_ok": 10,
+   "actions": {
+    "실행": 10
+   }
+  },
+  "control/control_then/seen": {
+   "n": 10,
+   "action_ok": 4,
+   "reason_or_plan_ok": 10,
+   "actions": {
+    "확인": 6,
+    "실행": 4
+   }
+  },
+  "demo/demo/seen": {
+   "n": 1,
+   "action_ok": 1,
+   "reason_or_plan_ok": 1,
+   "actions": {
+    "거부": 1
+   }
+  },
+  "demo/demo/heldout": {
+   "n": 6,
+   "action_ok": 5,
+   "reason_or_plan_ok": 5,
+   "actions": {
+    "거부": 2,
+    "실행": 3,
+    "확인": 1
+   }
+  },
+  "unknown/unknown_mod/seen": {
+   "n": 20,
+   "action_ok": 15,
+   "reason_or_plan_ok": 15,
+   "actions": {
+    "거부": 15,
+    "확인": 5
+   }
+  },
+  "unknown/unknown_mod/heldout": {
+   "n": 20,
+   "action_ok": 20,
+   "reason_or_plan_ok": 18,
+   "actions": {
+    "거부": 20
+   }
+  }
+ },
+ "unsupported": {
+  "n": 165,
+  "action_ok": 164,
+  "reason_or_plan_ok": 164
+ },
+ "unknown": {
+  "n": 40,
+  "action_ok": 35,
+  "reason_or_plan_ok": 33
+ },
+ "control": {
+  "n": 110,
+  "action_ok": 66,
+  "reason_or_plan_ok": 59
+ },
+ "demo": {
+  "n": 7,
+  "action_ok": 6,
+  "reason_or_plan_ok": 6
+ }
+}

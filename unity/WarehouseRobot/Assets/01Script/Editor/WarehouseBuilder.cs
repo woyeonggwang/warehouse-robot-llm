@@ -19,20 +19,92 @@ public static class WarehouseBuilder
     [MenuItem("Warehouse/Build 1 Area")] static void Build1() => Build(1);
     [MenuItem("Warehouse/Build 4 Areas")] static void Build4() => Build(4);
     [MenuItem("Warehouse/Build 8 Areas")] static void Build8() => Build(8);
+    [MenuItem("Warehouse/Build 16 Areas")] static void Build16() => Build(16);
+    [MenuItem("Warehouse/Build 25 Areas")] static void Build25() => Build(25);
+
+    const string GoToModelPath = "Assets/02Resources/00Component/Models/GoTo.onnx";
+
+    /// 학습된 모델로 돌려 보기: 모든 로봇에 GoTo 모델 지정, Inference Only, 결정적 추론(평균 행동, 잡음 없음)
+    [MenuItem("Warehouse/Mode: Inference (GoTo model)")] static void ModeInference() => SetMode(true);
+    /// 학습용으로 되돌리기: 모델 해제, Default (mlagents-learn 연결 시 학습)
+    [MenuItem("Warehouse/Mode: Training")] static void ModeTraining() => SetMode(false);
+    /// 비교 기준: NavMesh 경로 + Pure Pursuit + PID (같은 로봇·같은 바퀴 물리, 행동만 고전 제어기가 만듦)
+    [MenuItem("Warehouse/Mode: Classic (NavMesh + Pure Pursuit)")] static void ModeClassic() => SetMode(false, true);
+
+    public static void SetMode(bool inference) => SetMode(inference, false);
+
+    const string DemoScenePath = "Assets/00Scene/Demo.unity";
+
+    /// 시연 씬: 학습장 1개 + 작업자 4명 + GoTo 모델(결정적 추론, 시연 모드) + 명령 창(DemoCommandConsole) + 따라가는 카메라
+    [MenuItem("Warehouse/Build Demo Scene (LLM 연결)")]
+    static void BuildDemoScene()
+    {
+        if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+        var model = AssetDatabase.LoadMainAssetAtPath(GoToModelPath);
+        if (model == null) { Debug.LogError($"[WarehouseBuilder] 모델 없음: {GoToModelPath}"); return; }
+
+        var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+        Build(1);
+        var area = Object.FindFirstObjectByType<WarehouseArea>();
+        area.workerCount = 4;
+        var agent = area.GetComponentInChildren<RobotAgent>();
+        var bp = agent.GetComponent<BehaviorParameters>();
+        bp.GetType().GetProperty("Model").SetValue(bp, model);
+        bp.BehaviorType = BehaviorType.InferenceOnly;
+        bp.DeterministicInference = true;
+        agent.controller = RobotAgent.ControllerType.RL;
+        agent.demoMode = true;
+        agent.MaxStep = 0;                 // 시연은 시간 제한 없음
+        agent.transform.localPosition = new Vector3(0f, 0.15f, -8.5f);
+
+        var cam = Camera.main;
+        if (cam != null && cam.GetComponent<FollowCamera>() == null) cam.gameObject.AddComponent<FollowCamera>().target = agent.transform;
+
+        var demo = new GameObject("DemoConsole").AddComponent<DemoCommandConsole>();
+        demo.robot = agent;
+
+        EditorSceneManager.SaveScene(scene, DemoScenePath);
+        Debug.Log($"[WarehouseBuilder] 시연 씬 저장: {DemoScenePath}");
+    }
+
+    public static void SetMode(bool inference, bool classic)
+    {
+        var model = AssetDatabase.LoadMainAssetAtPath(GoToModelPath);
+        if (inference && model == null) { Debug.LogError($"[WarehouseBuilder] 모델 없음: {GoToModelPath} (rl/tools/merge_onnx.py 먼저 실행)"); return; }
+        int n = 0;
+        foreach (var bp in Object.FindObjectsByType<BehaviorParameters>(FindObjectsSortMode.None))
+        {
+            Undo.RecordObject(bp, "Warehouse Mode");
+            bp.GetType().GetProperty("Model").SetValue(bp, inference ? model : null);   // 추론 엔진 타입을 직접 참조하지 않으려고 리플렉션
+            bp.BehaviorType = classic ? BehaviorType.HeuristicOnly : inference ? BehaviorType.InferenceOnly : BehaviorType.Default;
+            bp.DeterministicInference = inference;
+            var agent = bp.GetComponent<RobotAgent>();
+            Undo.RecordObject(agent, "Warehouse Mode");
+            agent.controller = classic ? RobotAgent.ControllerType.Classic : RobotAgent.ControllerType.RL;
+            agent.measurePath = inference || classic;   // 평가 모드에서만 NavMesh 경로 길이 측정
+            EditorUtility.SetDirty(agent);
+            EditorUtility.SetDirty(bp);
+            n++;
+            if (n == 1) EditorSceneManager.MarkSceneDirty(bp.gameObject.scene);
+        }
+        Debug.Log($"[WarehouseBuilder] 로봇 {n}대 → {(classic ? "고전 제어 (NavMesh + Pure Pursuit)" : inference ? "추론 (GoTo 모델, 결정적)" : "학습")} 모드");
+    }
 
     public static void Build(int count)
     {
         EnsureTags(WarehouseLayout.ObstacleTags);
+        EnsureTags(WarehouseLayout.DynamicTags);
         var old = GameObject.Find("TrainingAreas");
         if (old != null) Undo.DestroyObjectImmediate(old);
 
         var root = new GameObject("TrainingAreas");
         Undo.RegisterCreatedObjectUndo(root, "Build Warehouse");
+        int cols = Mathf.CeilToInt(Mathf.Sqrt(count));   // 정사각형에 가깝게 배치 (16 → 4×4, 25 → 5×5)
         for (int i = 0; i < count; i++)
         {
             var area = BuildArea($"Area{i}");
             area.transform.SetParent(root.transform, false);
-            area.transform.localPosition = new Vector3((i % 4) * AreaSpacingX, 0f, (i / 4) * AreaSpacingZ);
+            area.transform.localPosition = new Vector3((i % cols) * AreaSpacingX, 0f, (i / cols) * AreaSpacingZ);
         }
         EditorSceneManager.MarkSceneDirty(root.scene);
         Debug.Log($"[WarehouseBuilder] 학습장 {count}개 생성");
@@ -153,7 +225,7 @@ public static class WarehouseBuilder
         var bp = robot.GetComponent<BehaviorParameters>();
         if (bp == null) bp = robot.AddComponent<BehaviorParameters>();
         bp.BehaviorName = "GoTo";
-        bp.BrainParameters.VectorObservationSize = 12;
+        bp.BrainParameters.VectorObservationSize = 13;   // 12 + 안전 정지 여부
         bp.BrainParameters.NumStackedVectorObservations = 1;
         bp.BrainParameters.ActionSpec = ActionSpec.MakeContinuous(2);
 
@@ -164,12 +236,25 @@ public static class WarehouseBuilder
         var ray = robot.AddComponent<RayPerceptionSensorComponent3D>();
         ray.SensorName = "Rays";
         ray.DetectableTags = new List<string>(WarehouseLayout.ObstacleTags);
+        ray.DetectableTags.AddRange(WarehouseLayout.DynamicTags);   // 작업자는 따로 구분해서 봄
         ray.RaysPerDirection = 8;
         ray.MaxRayDegrees = 180f;
         ray.RayLength = 8f;
         ray.SphereCastRadius = 0.1f;
         ray.StartVerticalOffset = 0.2f;
         ray.EndVerticalOffset = 0.2f;
+
+        // 가까운 거리 전용 광선 (2026-11-13): 길이 2m, 좌우 12개씩(25개, 약 7.5° 간격). 먼 광선(8m)은 가까운 거리 차이가 작게 들어가고
+        // 22.5° 간격이라 0.5m 거리에서 약 20cm 틈이 생겨 선반 모서리·작업자를 놓쳤음. 실제 로봇의 촘촘한 라이다·근거리 센서에 해당
+        var near = robot.AddComponent<RayPerceptionSensorComponent3D>();
+        near.SensorName = "NearRays";
+        near.DetectableTags = new List<string>(ray.DetectableTags);
+        near.RaysPerDirection = 12;
+        near.MaxRayDegrees = 180f;
+        near.RayLength = 2f;
+        near.SphereCastRadius = 0.05f;
+        near.StartVerticalOffset = 0.2f;
+        near.EndVerticalOffset = 0.2f;
     }
 
     static WheelCollider Wheel(string name, Transform parent, float x)

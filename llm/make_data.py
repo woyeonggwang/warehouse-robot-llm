@@ -44,6 +44,10 @@ def eul(word):       # 을/를
     return word + ("을" if _last_info(word)[0] else "를")
 
 
+def ga(word):        # 이/가
+    return word + ("이" if _last_info(word)[0] else "가")
+
+
 # ── 위치·물건 표현 ──────────────────────────────────────────────
 def shelf_phrase(loc):
     zone, num = loc[0], loc[1]
@@ -78,6 +82,10 @@ def rand_item():
 # ── 계획(JSON) 조각 ──────────────────────────────────────────────
 def p_go(t):
     return [{"skill": "go_to", "target": t}]
+
+
+def p_go_dock(t):
+    return [{"skill": "go_to", "target": t}, {"skill": "dock", "target": t}]
 
 
 def p_fetch(src, item):
@@ -172,6 +180,50 @@ def t_deliver(pattern_pool):
     return pattern_pool(pats)(), p_deliver(dst)
 
 
+def t_move_mod(pattern_pool):
+    """장소를 사람·물건으로 꾸미기만 하는 이동 명령 → 정상 계획 go_to(장소) (2026-11-15).
+    v3 가 '관리인이 있는 A3으로 가' 를 할 수 없는 일로 거부 → 사람이 나오는 문장 = 거부로 배우지 않게 대조 데이터.
+    사건 대기('~오면')·인식 결과로 갈리는 조건('~있는지 보고 없으면')은 할 수 없는 일 (t_unsup_event·t_unsup_check)"""
+    loc = random.choice(SHELVES + list(SPECIAL_LOCATIONS))
+    lp, p, t = loc_phrase(loc), random.choice(PEOPLE), random.choice(THINGS)
+    pats = [
+        lambda: f"{ga(p)} 있는 {ro(lp)} 가",
+        lambda: f"{ga(p)} 없는 {ro(lp)} 이동해",
+        lambda: f"지금 {ga(p)} 있는 {ro(lp)} 가",
+        lambda: f"{ga(p)} 일하고 있는 {lp} 쪽으로 가줘",
+        lambda: f"{ga(p)} 기다리는 {lp}에 가 줘",
+        lambda: f"{ga(t)} 놓여 있는 {ro(lp)} 가",
+        lambda: f"{ga(t)} 없는 {lp} 앞으로 가",
+        lambda: f"{ga(p)} 서 있는 {ro(lp)} 출발해",
+        lambda: f"아까 {ga(p)} 있던 {ro(lp)} 가 봐",
+        lambda: f"{ga(p)} 작업 중인 {ro(lp)} 가 볼래?",
+    ]
+    chosen = pattern_pool(pats)
+    # '{사람}이 기다리는 {장소}' 는 사람 위치 알림(t_inform)과 같은 뜻 → go_to → dock (2026-11-16 사용자 결정).
+    # 고르는 순서(무작위 호출)는 그대로라 make_scorer_sentences 의 문장은 바뀌지 않음
+    return chosen(), (p_go_dock(loc) if chosen is pats[4] else p_go(loc))
+
+
+def t_inform(pattern_pool):
+    """사람이 있는 곳을 알려 주며 가라는 명령 → go_to(장소) → dock(장소) (2026-11-16 사용자 결정).
+    사람이 그 위치에서 로봇을 기다린다 = 그리로 와서 붙으라는 뜻 (짐을 실어 줄 수 있음). 무엇을 실을지 모르므로 load 는 넣지 않음.
+    마지막 패턴(시연 '관리자가 A2에서 기다립니다 가세요' 형태)은 test 전용"""
+    loc = random.choice(SHELVES + list(SPECIAL_LOCATIONS))
+    lp, p = loc_phrase(loc), random.choice(PEOPLE)
+    pats = [
+        lambda: f"{ga(p)} {lp}에서 기다리고 있어요, 가세요",
+        lambda: f"{ga(p)} {lp}에 있으니 거기로 가",
+        lambda: f"{lp}에서 {ga(p)} 기다리고 있어. 그쪽으로 가",
+        lambda: f"{ga(p)} {lp}에 있어요. 가 주세요",
+        lambda: f"{ga(p)} {lp}에서 기다리니까 거기로 이동해",
+        lambda: f"{lp}에 {ga(p)} 와 있으니 가 봐",
+        lambda: f"{ga(p)} {ro(lp)} 오래. 거기로 가",
+        lambda: f"{ga(p)} {lp}에서 찾아. 가 봐",
+        lambda: f"{ga(p)} {lp}에서 기다립니다 가세요",
+    ]
+    return pattern_pool(pats)(), p_go_dock(loc)
+
+
 def t_charge(pattern_pool):
     pats = [
         lambda: "충전하러 가",
@@ -226,10 +278,10 @@ def t_stop(pattern_pool):
 
 SINGLE = {
     "move": t_move, "fetch_deliver": t_fetch_deliver, "fetch": t_fetch, "deliver": t_deliver,
-    "charge": t_charge, "follow": t_follow, "wait": t_wait,
+    "charge": t_charge, "follow": t_follow, "wait": t_wait, "move_mod": t_move_mod, "inform": t_inform,
 }
 SINGLE_WEIGHTS = {"move": 2, "fetch_deliver": 4, "fetch": 1.5, "deliver": 1.5, "charge": 1.5,
-                  "follow": 1, "wait": 1}
+                  "follow": 1, "wait": 1, "move_mod": 1, "inform": 1}
 
 # 연결 표현: 앞 문장을 마침표로 끊어서 어미 활용 문제 없이 자연스럽게 잇는다
 CONNECTORS = ["{a}, 그리고 {b}", "{a}. 그다음에 {b}", "{a}. 끝나면 {b}", "먼저 {a}. 그 후에 {b}",
@@ -244,16 +296,37 @@ def _ends_imperative(s):
 
 
 # ── 거부 데이터 ─────────────────────────────────────────────────
+UNKNOWN_PLACES = ([f"{z}{n}" for z in "EFGH" for n in range(1, 6)]
+                  + [f"{z}{n}" for z in "ABCD" for n in range(5, 10)]
+                  + ["2층 사무실", "주차장", "옥상", "휴게실", "식당", "정문"])
+
+
 def t_unknown_location(pattern_pool):
-    bad = random.choice(
-        [f"{z}{n}" for z in "EFGH" for n in range(1, 6)]
-        + [f"{z}{n}" for z in "ABCD" for n in range(5, 10)]
-        + ["2층 사무실", "주차장", "옥상", "휴게실", "식당", "정문"]
-    )
+    bad = random.choice(UNKNOWN_PLACES)
     pats = [lambda: f"{ro(bad)} 가", lambda: f"{bad}에서 상자 꺼내서 출고장에 갖다 놔",
             lambda: f"{ro(bad)} 이동해", lambda: f"{bad}에 가 있어", lambda: f"{bad} 쪽으로 가줘",
             lambda: f"{bad}에서 바구니 실어", lambda: f"박스 {ro(bad)} 옮겨",
             lambda: f"택배 {bad}에 내려놔"]
+    return pattern_pool(pats)(), None, "unknown_location"
+
+
+def t_unknown_mod(pattern_pool):
+    """꾸밈말·사람 위치 알림 + 목록에 없는 위치 → unknown_location (2026-11-16, v5).
+    v4 에서 꾸밈말을 넣은 뒤 해석 모델만 쓸 때 목록 밖 장소 잘못 실행이 27 → 83 으로 늘어서 되돌리려는 거부 예시.
+    없는 위치는 t_unknown_location 과 같은 목록 (평가용 장소는 쓰지 않음). 마지막 패턴은 test 전용"""
+    bad = random.choice(UNKNOWN_PLACES)
+    p, t = random.choice(PEOPLE), random.choice(THINGS)
+    pats = [
+        lambda: f"{ga(p)} 있는 {ro(bad)} 가",
+        lambda: f"{ga(p)} 없는 {ro(bad)} 이동해",
+        lambda: f"{ga(t)} 놓여 있는 {ro(bad)} 가",
+        lambda: f"{ga(p)} 일하고 있는 {bad} 쪽으로 가줘",
+        lambda: f"{ga(p)} 기다리는 {bad}에 가 줘",
+        lambda: f"{ga(p)} {bad}에서 기다리고 있어요, 가세요",
+        lambda: f"{ga(p)} {bad}에 있으니 거기로 가",
+        lambda: f"{bad}에 {ga(p)} 와 있으니 가 봐",
+        lambda: f"{ga(p)} {bad}에서 기다립니다 가세요",
+    ]
     return pattern_pool(pats)(), None, "unknown_location"
 
 
@@ -265,6 +338,124 @@ def t_unsupported(pattern_pool):
     pats = [lambda: random.choice(acts), lambda: random.choice(acts) + " 줘",
             lambda: "지금 " + random.choice(acts), lambda: random.choice(acts) + " 좀"]
     return pattern_pool(pats)(), None, "unsupported_command"
+
+
+# 할 수 없는 일 추가 유형 (2026-11-15, 시연에서 발견: '충전기가져와' → 충전하러 감,
+# '화장실에서 관리자가 나오면 관리자보다 먼저 A1으로 가' → 2B 가 할 수 없는 일로 보지 않음).
+# 규칙·장소 목록 대조 없이 데이터로 해결. 각 유형의 마지막 패턴은 test 전용(held-out)
+NON_ITEMS = ["충전기", "충전 스테이션", "선반", "포장대", "작업대", "입고대", "지게차", "컨베이어", "랙", "책상"]
+PEOPLE = ["관리자", "작업자", "팀장님", "사람", "기사님", "다른 로봇", "직원", "반장님", "경비원"]   # 뒤 3개 2026-11-15 추가
+THINGS = ["지게차", "상자", "택배", "빈 팔레트", "카트"]
+ROOMS = ["화장실", "사무실", "회의실", "휴게실", "엘리베이터", "탈의실"]
+# '관리인' 은 일부러 넣지 않음: 시연 문장('관리인이 있는 A3으로 가' 등)을 처음 보는 단어로 평가
+
+
+def _any_loc():
+    return loc_phrase(random.choice(SHELVES + list(SPECIAL_LOCATIONS)))
+
+
+def t_unsup_object(pattern_pool):
+    """물건이 아닌 대상(설비·가구)을 운반하라는 명령. 로봇이 싣는 물건은 상자·택배·바구니뿐"""
+    obj = random.choice(NON_ITEMS)
+    lp = _any_loc()
+    while obj in lp or lp in obj:              # '포장대를 포장대로 옮겨' 같은 문장 제외
+        lp = _any_loc()
+    pats = [
+        lambda: f"{obj} 가져와",
+        lambda: f"{obj} 들고 와",
+        lambda: f"{eul(obj)} {ro(lp)} 옮겨",
+        lambda: f"{obj} 좀 가져다줘",
+        lambda: f"{lp}에 {obj} 갖다 놔",
+        lambda: f"{obj} 싣고 와",
+        lambda: f"{obj.replace(' ', '')}{random.choice(['가져와', '들고와', '갖다줘'])}",   # 띄어쓰기 없이 입력
+        lambda: f"{obj} 하나 가져와",
+        lambda: f"{obj} 옮겨 와",
+    ]
+    return pattern_pool(pats)(), None, "unsupported_command"
+
+
+def t_unsup_event(pattern_pool):
+    """조건·사건을 기다렸다가 움직이라는 명령. 로봇은 사건을 감지해 기다리는 기능이 없음 (wait 는 정해진 시간만)"""
+    who = random.choice(PEOPLE)
+    event = random.choice([f"{ga(who)} 오면", f"{ga(who)} 나오면", f"{ga(who)} 부르면", "트럭이 도착하면",
+                           "문이 열리면", "택배가 들어오면", "벨이 울리면", "점심시간 되면", "3시가 되면", "불이 켜지면"])
+    room, lp = random.choice(ROOMS), _any_loc()
+    pats = [
+        lambda: f"{event} {ro(lp)} 가",
+        lambda: f"{event} 출발해",
+        lambda: f"{room}에서 {ga(who)} 나오면 {ro(lp)} 가",
+        lambda: f"{event} {ro(lp)} 이동해",
+        lambda: f"{event} 바로 {lp}에 가 있어",
+        lambda: f"{event} 충전하러 가",
+        lambda: f"{event} 알려 줘",
+        lambda: f"{lp}에서 기다렸다가 {event} 출발해",
+    ]
+    return pattern_pool(pats)(), None, "unsupported_command"
+
+
+def t_unsup_race(pattern_pool):
+    """사람·다른 기계와 경쟁·비교하라는 명령 ('~보다 먼저 가'). 연결 표현 '먼저 A. 그 후에 B' 와는 다름"""
+    who = random.choice(["관리자", "작업자", "저 사람", "다른 로봇", "지게차", "팀장님"])
+    lp = _any_loc()
+    pats = [
+        lambda: f"{who}보다 먼저 {ro(lp)} 가",
+        lambda: f"{who}보다 빨리 {lp}에 가",
+        lambda: f"{who}하고 {lp}까지 시합해",
+        lambda: f"{eul(who)} 앞질러서 {ro(lp)} 가",
+        lambda: f"{who}보다 먼저 {lp}에 도착해",
+        lambda: f"{ga(who)} 가기 전에 {ro(lp)} 가",
+        lambda: f"{lp}까지 {who}보다 빨리 가",
+    ]
+    return pattern_pool(pats)(), None, "unsupported_command"
+
+
+def t_unsup_check(pattern_pool):
+    """사람·물건이 있는지 알아본 결과에 따라 행동이 갈리는 명령 (2026-11-15). 로봇은 사람·물건을 알아보는 기능이 없음.
+    '{사람}이 있는 {장소}로 가' 처럼 장소를 꾸미기만 하는 문장(t_move_mod)은 정상 명령"""
+    who = random.choice(PEOPLE + THINGS)
+    lp, lp2 = _any_loc(), _any_loc()
+    while lp2 == lp:
+        lp2 = _any_loc()
+    pats = [
+        lambda: f"{lp}에 {ga(who)} 있는지 보고 없으면 {ro(lp2)} 가",
+        lambda: f"{ga(who)} {lp}에 있으면 {ro(lp2)} 가",
+        lambda: f"{lp}에 {ga(who)} 없으면 {ro(lp2)} 이동해",
+        lambda: f"{lp} 가서 {ga(who)} 있는지 확인해",
+        lambda: f"{ga(who)} 있는지 확인하고 없으면 {ro(lp)} 가",
+        lambda: f"{lp}에 {ga(who)} 있으면 거기서 기다려",
+        lambda: f"{ga(who)} 없을 때 {ro(lp)} 가",
+        lambda: f"{ga(who)} {lp}에 있는지 가서 확인하고 없다면 {ro(lp2)} 가",
+    ]
+    return pattern_pool(pats)(), None, "unsupported_command"
+
+
+def t_unsup_wait(pattern_pool):
+    """위치 알림('~가 ~에서 기다리고 있어요, 가세요' → go_to → dock)과 구별하는 대조 문장 (2026-11-16, v6).
+    v5 에서 위치 알림 데이터가 처음 보는 '~에서 기다렸다가 ~가 부르면 출발해'·'~가 ~에 있는지 가서 확인하고 없다면 ~로 가'
+    로 번져 go_to → dock 으로 해석됨 → 로봇이 그 자리에서 기다리다가 사건이 생기면 움직이기 / 가서 사람이 있는지 보고 오기 는
+    할 수 없는 일. 주의: 평가 전용 패턴과 구조가 비슷해서 그 패턴의 점수가 실제보다 좋게 나올 수 있음"""
+    who = random.choice(PEOPLE)
+    event = random.choice([f"{ga(who)} 오면", f"{ga(who)} 나오면", f"{ga(who)} 부르면", "트럭이 도착하면",
+                           "문이 열리면", "택배가 들어오면", "벨이 울리면", "점심시간 되면", "3시가 되면", "불이 켜지면"])
+    lp, lp2 = _any_loc(), _any_loc()
+    while lp2 == lp:
+        lp2 = _any_loc()
+    pats = [
+        lambda: f"{lp}에서 대기하다가 {event} 가",
+        lambda: f"{lp}에 있다가 {event} {ro(lp2)} 가",
+        lambda: f"{lp}에서 기다리다가 {event} {ro(lp2)} 이동해",
+        lambda: f"{lp}에 서 있다가 {event} 출발해",
+        lambda: f"{lp}에 가서 {ga(who)} 있는지 보고 와",
+        lambda: f"{lp}에 가서 {ga(who)} 있는지 보고 없으면 {ro(lp2)} 가",
+        lambda: f"{lp} 가서 {who} 있나 확인하고 와",
+        lambda: f"{lp}에 가서 {ga(who)} 있으면 거기서 기다려",
+        lambda: f"{lp}에서 멈춰 있다가 {event} 움직여",
+    ]
+    return pattern_pool(pats)(), None, "unsupported_command"
+
+
+UNSUP_EXTRA = {"unsup_object": t_unsup_object, "unsup_event": t_unsup_event, "unsup_race": t_unsup_race,
+               "unsup_check": t_unsup_check, "unsup_wait": t_unsup_wait}
 
 
 # ── 템플릿 패턴 분리: 각 템플릿의 마지막 패턴은 test 전용 ────────────────
@@ -288,12 +479,19 @@ def sample(mode):
     if r < 0.15:
         txt, _, err = t_unsupported(pool)
         return txt, {"plan": [], "error": err}, "unsupported"
-    if r < 0.20:
+    if r < 0.25:                                   # 할 수 없는 일 추가 유형 5가지 (2026-11-15~16, 각 2%)
+        name = random.choice(list(UNSUP_EXTRA))
+        txt, _, err = UNSUP_EXTRA[name](pool)
+        return txt, {"plan": [], "error": err}, name
+    if r < 0.27:                                   # 꾸밈말·위치 알림 + 없는 위치 (2026-11-16, v5, 2%)
+        txt, _, err = t_unknown_mod(pool)
+        return txt, {"plan": [], "error": err}, "unknown_mod"
+    if r < 0.32:
         txt, plan = t_stop(pool)
         return txt, {"plan": plan}, "stop"
     names = list(SINGLE)
     weights = [SINGLE_WEIGHTS[n] for n in names]
-    if r < 0.40:                                   # 두 작업 연결
+    if r < 0.52:                                   # 두 작업 연결
         n1, n2 = random.choices(names, weights, k=2)
         while n1 in NO_FIRST or n1 == n2:          # 같은 작업 두 번(충전→충전 등)이나 follow 다음 작업은 제외
             n1, n2 = random.choices(names, weights, k=2)
@@ -338,6 +536,11 @@ def main():
         for row in test:
             owner[row["input"]] = "test"            # 기존 test 문장은 train/val 에 들어가지 않게 예약
         print("기존 test 유지 (data/test.jsonl)")
+    if os.path.exists("data/probe_unsupported.jsonl"):     # 추가 평가 세트 문장도 train/val 에 들어가지 않게 예약 (2026-11-16, v6)
+        n0 = len(owner)
+        for line in open("data/probe_unsupported.jsonl", encoding="utf-8"):
+            owner.setdefault(json.loads(line)["input"], "probe")
+        print(f"추가 평가 세트 문장 {len(owner) - n0}개 예약 (data/probe_unsupported.jsonl)")
     train = build(4000, "train", owner, "train")
     val = build(300, "train", owner, "val")
     if test is None:

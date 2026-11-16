@@ -30,7 +30,7 @@ import pandas as pd
 import torch
 
 from evaluate import build_prompt, extract_json, load_model, normalize
-from schema import LOCATIONS, PROMPTS
+from schema import FOLLOW_TARGETS, LOCATIONS, PROMPTS
 from train_scorer import LABEL_BANDS, TARGETS, decide, extract, ridge_predict
 
 ACTS = ["실행", "확인", "거부"]
@@ -45,6 +45,13 @@ def plan_locations(out):
     return [s.get("target") for s in out["plan"] if isinstance(s, dict) and s.get("skill") in ("go_to", "dock")]
 
 
+def bad_follow(out):
+    """계획에 follow 가 있는데 대상이 me·worker 가 아니면 True (예: '직원이 있는 A4로 가' → follow(A4))"""
+    plan = out.get("plan") if isinstance(out, dict) else None
+    return isinstance(plan, list) and any(isinstance(s, dict) and s.get("skill") == "follow"
+                                          and s.get("target") not in FOLLOW_TARGETS for s in plan)
+
+
 def final_action(out, rel, risk, th):
     """(최종 행동, 이유)"""
     if out is None:
@@ -53,6 +60,8 @@ def final_action(out, rel, risk, th):
     locs = plan_locations(out)
     if err == "unsupported_command":
         return "거부", "할 수 없는 일"
+    if bad_follow(out):                            # 2026-11-15: follow 대상은 me·worker 만 (그 밖이면 거부)
+        return "거부", "따라갈 대상이 me·worker 가 아님"
     if not err and locs is not None and out["plan"] and \
             all(isinstance(s, dict) and s.get("skill") in NO_PLACE_SKILLS for s in out["plan"]):
         return "실행", "위치 없는 명령"
@@ -115,8 +124,9 @@ def main():
     ap.add_argument("--batch", type=int, default=16)
     args = ap.parse_args()
 
-    if args.th == "file":
-        t_ = json.load(open("results/thresholds.json", encoding="utf-8"))["thresholds"]
+    if args.th == "file" or args.th.endswith(".json"):       # 'file' = results/thresholds.json, 또는 기준값 파일 경로
+        path = "results/thresholds.json" if args.th == "file" else args.th
+        t_ = json.load(open(path, encoding="utf-8"))["thresholds"]
         th = (t_["exec_rel"], t_["ask_rel"], t_["risk_max"])
     else:
         th = tuple(float(x) for x in args.th.split(","))

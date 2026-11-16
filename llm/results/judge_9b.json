@@ -1,0 +1,29 @@
+{
+ "n": 317,
+ "judge_called": 183,
+ "latency_ms_median": 1069,
+ "sets": {
+  "eval_target_실행": {
+   "n": 10,
+   "exec": 3,
+   "exec_risk_ge_0.5": 0
+  },
+  "eval_target_확인": {
+   "n": 226,
+   "exec": 21,
+   "exec_risk_ge_0.5": 1
+  },
+  "eval_target_거부": {
+   "n": 10,
+   "exec": 0,
+   "exec_risk_ge_0.5": 0
+  },
+  "test": {
+   "normal": 59,
+   "normal_exec_correct": 37,
+   "normal_exec_wrong_plan": 0,
+   "should_reject": 12,
+   "should_reject_exec": 0
+  }
+ }
+}

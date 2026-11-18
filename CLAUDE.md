@@ -687,6 +687,35 @@ warehouse-robot-llm/
     - GPU 메모리 (Windows 성능 카운터 GPU Adapter Memory): 9B 없음 전용 5.94 + 공유 0.25GB / 32768 전용 11.47 + 공유 1.11GB (합계 12.6GB, 12GB 를 넘어 공유로 넘침) / 4096 전용 11.31 + 공유 0.25GB (합계 11.6GB). 다만 9B 를 올리고 내릴 때마다 Windows 가 2B 서버·Unity 메모리를 옮겨서 '9B 없음' 값이 5.9 → 4.1GB 로 바뀌는 등 순서에 따라 흔들림 → 줄어든 양을 정확히 분리하지는 못함. 확실한 것은 Ollama 표시 크기 1.1GB 감소
 - 확인 필요: 확인 응답의 '네' 버튼 → 실행. 시연 중 정차 오차(0.5m 이상 사례)와 go_to 중 선반 충돌
 
+## 시연 외형 (Blender, 2026-11-16)
+- 목적: 포트폴리오 영상용. 기본 도형(상자·원기둥) 대신 로봇·선반·작업대·창고 건물 모델을 입히고, 창고 밖(Unity 빈 배경)이 보이지 않게 함
+- 원칙: **보이는 모양만 교체, 콜라이더·위치·태그는 그대로** → 학습된 GoTo 정책과 광선 센서 입력이 바뀌지 않음. 교체한 모델에는 콜라이더 없음 (확인함, 0개)
+- Blender 원본(.blend)은 저장소에 넣지 않음 (Python 스크립트로 생성). 내보내기: Assets/02Resources/01Models/*.fbx
+  - AMR_Body, AMR_Wheel, Rack_A·Rack_B (2.3×2.0×1.0), Station_Inbound·Outbound(롤러 컨베이어)·Packing(작업대)·Charger(충전 타워), Warehouse_Shell (높이 6m 벽·천장·트러스·조명·롤업 도어·고창), Warehouse_Floor (콘크리트 바닥·선반 테두리 선·주행 차선·작업대 앞 빗금 구역·충전 구역·보행로)
+  - FBX 설정: axis_forward -Z, axis_up Y, bake_space_transform, FBX_SCALE_ALL → Unity 에서 회전 0·크기 1 로 들어옴, 재질은 URP Lit 으로 자동 생성
+  - 축 대응 (확인함): Blender (x, y) → Unity (-x, -y). Blender -Y 를 앞으로 만든 로봇이 Unity +Z(로봇 앞)를 향함
+- Demo 씬 적용 (VIS_ 로 시작하는 오브젝트): 기존 Floor·Wall·Shelf·Station·Body·Front·바퀴 원기둥의 MeshRenderer 만 끔
+  - 바퀴: RobotAgent.SyncVisual 이 원기둥용 회전 Euler(0,0,90) 을 붙이므로, WheelL/R_Visual 아래 자식으로 넣고 회전 (0,0,-90)·크기 (1/0.03, 1/0.24, 1/0.24) 로 보정
+  - 동쪽 작업대(출고·포장)는 Y 180° 회전해 앞면이 창고 안쪽을 보게 함
+  - 건물(Shell) 렌더러는 그림자 끔 (천장이 Directional Light 를 막지 않게). 카메라 배경 Skybox → 짙은 회색 단색
+- 카메라가 벽 밖으로 나감 (2026-11-16): 로봇이 남쪽 벽 가까이에서 시작하면 FollowCamera 가 높은 벽 밖에 놓여 벽 뒷면과 선반 이름표만 보였음
+  - 원인: 벽 콜라이더 높이가 1.5m 라 로봇(높이 0.5m)→카메라(높이 3.5m) Linecast 가 벽 위로 지나가서 기존 '벽 앞으로 당기기'가 동작하지 않음. 또 첫 프레임에 씬의 처음 위치(0,1,-10)에서 미끄러져 옴
+  - 해결: 카메라 목표 위치를 창고 안쪽 범위(학습장 중심 기준 x ±12·z ±10, 벽에서 0.6m 띄움)로 직접 제한하고, 첫 프레임은 바로 그 자리에 둠. Play 로 확인 (2026-11-16)
+- 포트폴리오 영상 (2026-11-16, portfolio_video/, git 에 올리지 않음)
+  - 최종본 (사용자 요청 반영: 영상 두 개를 따로, 창고 시연은 원래 속도, 강화학습만 10배속, 탑뷰에서 탑뷰로 확대)
+    - warehouse_demo.mp4 (57.5초, 원래 속도): ① 'A3에서 상자 꺼내서 포장대에 갖다 놔' 실행 ② '하역장으로 가' → 9B 판단 거부 ③ '충전기 가져와' → 할 수 없는 일 거부. 원본 demo_v2_raw.mp4 (명령 7개, 230초)
+    - rl_10x.mp4 (14.2초, 10배속): SampleScene 을 Inference 모드로 실행, 5x5 전체 탑뷰(높이 128m) → 2초 동안 가운데 학습장 탑뷰(높이 21.5m)로 내려가며 확대 → 에피소드 약 10회. 원본 train25_top_raw.mp4
+    - 앞선 시안(demo_3cmd·train_10x·portfolio_full: 주행 3배속, 사선 뷰 확대, 두 영상 합침)은 채택 안 함
+  - 촬영 방법: Unity Recorder 를 실행 중 에디터 스크립트로 RecorderController 시작·정지, 명령은 DemoCommandConsole.Send 를 리플렉션으로 호출. 카메라 연출은 Assets/01Script/Demo/CameraShot.cs (실행 중 Main Camera 에 붙임, 학습과 무관)
+  - SampleScene 은 촬영 때만 Inference 모드로 바꾸고 저장하지 않음 (Training 모드 그대로)
+- 촬영 중 관찰 (2026-11-16, 9B 판단 켠 서버 v4): '관리인이 있는 A3으로 가' → 9B 가 "관리인이 있으면 위험할 수 있다" 며 거부 (관계율 0.81, 위험률 0.51). 꾸밈말 명령은 실행이 정답이라고 정했으므로 9B 판단 프롬프트 기준과 어긋남 (미해결)
+- 주의: WarehouseBuilder 의 'Build Demo Scene' 메뉴로 씬을 다시 만들면 이 외형이 사라짐. 훈련 씬(SampleScene)에는 적용하지 않음
+- 작업자 외형 (2026-11-16): Blender 로 만든 간단한 사람 모형(안전모·주황 조끼·반사 띠, 키 약 1.73m)을 Assets/Resources/WorkerVisual.fbx 로 내보냄. 팔·다리는 관절 위치를 중심점으로 둔 별도 오브젝트(LegL·LegR·ArmL·ArmR)
+  - WorkerWalker.Create 가 Resources.Load 로 불러 붙이고(없으면 예전 캡슐), LateUpdate 에서 NavMeshAgent 속도에 맞춰 팔다리를 앞뒤로 흔듦
+  - 판정은 기존 Capsule 콜라이더(태그 Worker) 그대로 → 훈련 씬에도 외형이 붙지만 학습·평가 동작에는 영향 없음
+  - Play 로 확인 (2026-11-16): 작업자 4명 모두 사람 모형으로 생성, 진행 방향을 보고 걸음
+- 영상: portfolio_video/ 에 저장 (Unity Recorder 5.1.8, 1920×1080·30fps MP4). 첫 촬영본 demo_raw_145806.mp4 는 외형 교체 전. 영상 파일은 커서 git 에 올리지 않음 (.gitignore 추가는 확인 필요)
+
 ## 베이스 모델 후보
 - Qwen/Qwen3.5-0.8B, Qwen/Qwen3.5-2B: Apache 2.0, Unsloth 공식 파인튜닝 지원. 모델 카드상 0.8B 는 '작업별 파인튜닝' 용도를 명시. 이미지 입력도 받는 모델이라 transformers 에서 CausalLM 클래스로 안 열릴 수 있음 (evaluate.py 는 ImageTextToText 클래스로 대체 시도)
 - naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-1.5B: 한국어 특화, 텍스트 전용, 컨텍스트 16k. Hugging Face 에서 이용 조건 동의 후 받을 수 있음(gated). Unsloth 지원 여부 확인 필요

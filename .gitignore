@@ -51,3 +51,8 @@ sysinfo.txt
 .vs/
 .vscode/
 .idea/
+
+# ── README 이미지·ML-Agents 실행 기록 (로컬 경로가 들어감) ──
+docs/images/
+**/ML-Agents/Timers/
+**/ML-Agents/Timers.meta
